@@ -2,6 +2,7 @@ import 'package:events_planning/data/client.dart';
 import 'package:events_planning/data/event.dart';
 import 'package:events_planning/data/event_category.dart';
 import 'package:events_planning/data/preference.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io';
@@ -25,7 +26,7 @@ class DBProvider {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "events_db.db");
     print(path);
-    return await openDatabase(path, version: 1,
+    return await openDatabase(path, version: 2,
         onOpen: (db) {},
         onCreate: (Database db, int version) async {
           await db.execute("CREATE TABLE IF NOT EXISTS Client ("
@@ -36,35 +37,37 @@ class DBProvider {
               "phone TEXT,"
               "email TEXT,"
               "social TEXT"
-              ");"
-              "CREATE TABLE IF NOT EXISTS Category ("
-              "id INTEGER PRIMARY KEY,"
-              "title TEXT,"
-              "color TEXT);"
-              "CREATE TABLE IF NOT EXISTS Event ("
-              "id INTEGER PRIMARY KEY,"
-              "categoryId INTEGER,"
-              "title TEXT,"
-              "description TEXT,"
-              "address TEXT,"
-              "budget REAL,"
-              "startTime TEXT,"
-              "ownerId INTEGER"
-              "FOREIGN KEY (categoryId) REFERENCES Category (id)"
-              "ON DELETE CASCADE ON UPDATE CASCADE,"
-              "FOREIGN KEY (ownerId) REFERENCES Client (id)"
-              "ON DELETE CASCADE ON UPDATE CASCADE);"
-              "CREATE TABLE IF NOT EXISTS Preference ("
-              "id INTEGER PRIMARY KEY,"
-              "title TEXT,"
-              "img TEXT);"
-              "CREATE TABLE IF NOT EXISTS Client_Preference (id INTEGER PRIMARY KEY, client_id INTEGER, pref_id INTEGER"
-              "FOREIGN KEY (client_id) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,"
-              "FOREIGN KEY (pref_id) REFERENCES Preference (id) ON DELETE CASCADE ON UPDATE CASCADE);"
-              "CREATE TABLE IF NOT EXISTS Client_Event (id INTEGER PRIMARY KEY, client_id INTEGER, event_id INTEGER"
-              "FOREIGN KEY (client_id) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,"
-              "FOREIGN KEY (event_id) REFERENCES Event (id) ON DELETE CASCADE ON UPDATE CASCADE);");
-        });
+              ");");
+        },
+    onUpgrade: (Database db, int version, int oldVersion) async {
+    await db.execute("CREATE TABLE IF NOT EXISTS EventCategory ("
+    "id INTEGER PRIMARY KEY,"
+    "title TEXT,"
+    "color TEXT);");
+    await db.execute("CREATE TABLE IF NOT EXISTS Event ("
+    "id INTEGER PRIMARY KEY,"
+    "categoryId INTEGER,"
+    "title TEXT,"
+    "description TEXT,"
+    "address TEXT,"
+    "budget REAL,"
+    "startTime TEXT,"
+    "ownerId INTEGER, "
+    "FOREIGN KEY (categoryId) REFERENCES EventCategory (id) "
+    "ON DELETE CASCADE ON UPDATE CASCADE,"
+    "FOREIGN KEY (ownerId) REFERENCES Client (id) "
+    "ON DELETE CASCADE ON UPDATE CASCADE);");
+    await db.execute("CREATE TABLE IF NOT EXISTS Preference ("
+    "id INTEGER PRIMARY KEY,"
+    "title TEXT,"
+    "img TEXT);");
+    await db.execute("CREATE TABLE IF NOT EXISTS Client_Preference (id INTEGER PRIMARY KEY, client_id INTEGER, pref_id INTEGER,"
+    "FOREIGN KEY (client_id) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,"
+    "FOREIGN KEY (pref_id) REFERENCES Preference (id) ON DELETE CASCADE ON UPDATE CASCADE);");
+    await db.execute( "CREATE TABLE IF NOT EXISTS Client_Event (id INTEGER PRIMARY KEY, client_id INTEGER, event_id INTEGER,"
+    "FOREIGN KEY (client_id) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,"
+    "FOREIGN KEY (event_id) REFERENCES Event (id) ON DELETE CASCADE ON UPDATE CASCADE);");
+    });
   }
 
   newClient(Client newClient) async {
@@ -108,9 +111,9 @@ class DBProvider {
     var res = await db?.rawInsert(
         "INSERT Into Event (id,categoryId,title,description,"
             "address,budget,startTime,ownerId)"
-            " VALUES (${newEvent.id},${newEvent.categoryId},${newEvent.title},"
-            "${newEvent.description},${newEvent.address},${newEvent.budget}, "
-            "${newEvent.startTime},${newEvent.ownerId})");
+            " VALUES (${newEvent.id},${newEvent.categoryId},'${newEvent.title}',"
+            "'${newEvent.description}','${newEvent.address}','${newEvent.budget}', "
+            "'${newEvent.startTime}','${newEvent.ownerId}')");
     return res;
   }
   getEvent(int id) async {
@@ -118,7 +121,14 @@ class DBProvider {
     var res =await  db?.query("Event", where: "id = ?", whereArgs: [id]);
     return res!.isNotEmpty ? Event.fromJson(res.first) : Null ;
   }
-  getAllEvent() async {
+  Future<List<Event>> getAllEvent() async {
+    final db = await database;
+    var res = await db!.query("Event");
+    List<Event> list =
+    res.isNotEmpty ? res.map((c) => Event.fromJson(c)).toList() : [];
+    return list;
+  }
+  getEvents() async {
     final db = await database;
     var res = await db!.query("Event");
     List<Event> list =
@@ -148,15 +158,16 @@ class DBProvider {
     final db = await database;
     var res = await db?.rawInsert(
         "INSERT Into EventCategory (id,title,color)"
-            " VALUES (${newCat.id},${newCat.title},${newCat.color}");
+            " VALUES (${newCat.id},'${newCat.title}','${newCat.color}')");
     return res;
   }
-  getCategory(int id) async {
+   Future<EventCategory> getCategory(int id) async {
     final db = await database;
     var res =await  db?.query("EventCategory", where: "id = ?", whereArgs: [id]);
-    return res!.isNotEmpty ? EventCategory.fromJson(res.first) : Null ;
+        // .then((value) => EventCategory.fromJson(value as Map<String, dynamic>));
+    return EventCategory.fromJson(res!.first) ;
   }
-  getAllCat() async {
+  Future<List<EventCategory>> getAllCat() async {
     final db = await database;
     var res = await db!.query("EventCategory");
     List<EventCategory> list =
@@ -203,5 +214,13 @@ class DBProvider {
     final db = await database;
     db!.delete("Preference", where: "id = ?", whereArgs: [id]);
   }
+
+  Future<int> getEventNumberByCat(int id) async {
+    final db = await database;
+    var res = Sqflite.firstIntValue(
+        await db!.rawQuery("SELECT count(*) FROM Event WHERE categoryId = ${id}"));
+    return res!;
+  }
+
 }
 

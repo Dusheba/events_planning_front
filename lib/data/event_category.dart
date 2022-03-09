@@ -25,13 +25,13 @@ class EventCategory {
   factory EventCategory.fromJson(Map<String, dynamic> json) => new EventCategory(
       id: json["id"],
       title: json["title"],
-      color: json["gradient"],
+      color: json["color"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "title": title,
-    "gradient": color,
+    "color": color,
   };
 
 }

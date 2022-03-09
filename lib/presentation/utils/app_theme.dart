@@ -118,4 +118,18 @@ class AppTheme {
       ),
     ];
   }
+
+  static getGradientByName(String gradient) {
+    switch (gradient){
+      case 'birthdayGradient':
+          return birthdayGradient;
+      case 'weddingGradient':
+        return weddingGradient;
+
+      case 'partyGradient' :
+        return partyGradient;
+      default:
+        return otherGradient;
+    }
+  }
 }

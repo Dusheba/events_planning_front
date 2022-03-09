@@ -18,7 +18,7 @@ class Event {
   final String description;
   final String address;
   final double? budget;
-  final DateTime? startTime;
+  final String? startTime;
   final int ownerId;
 
   Event(
