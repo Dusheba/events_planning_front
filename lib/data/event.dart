@@ -41,7 +41,7 @@ class Event {
       description: json["description"],
       address: json["address"],
       budget: json["budget"],
-      startTime: DateTime.fromMicrosecondsSinceEpoch(json["startTime"]),
+      startTime: DateTime.fromMillisecondsSinceEpoch(json["startTime"]),
       owner: Client.fromJson(json["owner"])
   );
 
@@ -62,12 +62,36 @@ class Event {
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(utf8.decode(response.bodyBytes));
-      print(res);
       for (var cl in res) {
         events.add(Event.fromJson(cl));
-        print(cl);
       }
     }
     return events;
+  }
+
+  static Future<List<Event>> fetchEventByCat(int id) async {
+    List<Event> events = [];
+    var url = "http://10.0.2.2:8080/api/events/categoty?category=$id";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(utf8.decode(response.bodyBytes));
+      for (var cl in res) {
+        events.add(Event.fromJson(cl));
+      }
+    }
+    return events;
+  }
+
+  static Future<int> fetchNumber(int id) async {
+    List<Event> events = [];
+    var url = "http://10.0.2.2:8080/api/events/categoty?category=$id";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(utf8.decode(response.bodyBytes));
+      for (var cl in res) {
+        events.add(Event.fromJson(cl));
+      }
+    }
+    return events.length;
   }
 }

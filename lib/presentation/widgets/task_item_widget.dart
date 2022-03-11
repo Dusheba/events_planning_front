@@ -42,8 +42,8 @@ class EventItemWidget extends StatelessWidget {
                     Text(
                         event.startTime != null
                             ? event.startTime!.format(FormatDate.deadline)
-                            : 'Дата не указан',
-                        style: AppTheme.eventPanelHeadline),
+                            : 'Дата не указана',
+                        style: AppTheme.dateEventPanelText),
                   ],
                 ),
                 SizedBox(height: 16),
@@ -52,7 +52,7 @@ class EventItemWidget extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.purpleDark,
+                        color: AppTheme.grey.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(category.title, style: AppTheme.eventPanelHeadline),
@@ -61,16 +61,16 @@ class EventItemWidget extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: (event.startTime!.millisecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch
-                            ? AppTheme.lightOrange
-                            : AppTheme.purpleDark)
+                        color: (event.startTime!.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch
+                            ? AppTheme.grey
+                            : AppTheme.grey)
                             .withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                          event.startTime!.millisecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch
+                          event.startTime!.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch
                               ? 'Прошедшее' : 'Предстоящее',
-                          style: AppTheme.eventHeadline),
+                          style: AppTheme.eventPanelHeadline),
                     ),
                   ],
                 ),

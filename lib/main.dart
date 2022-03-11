@@ -6,6 +6,7 @@ import 'package:events_planning/presentation/routes/page_path.dart';
 import 'package:events_planning/presentation/utils/app_theme.dart';
 import 'package:events_planning/presentation/utils/constants.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
+import 'package:events_planning/presentation/widgets/bottom_nav_bar.dart';
 import 'package:events_planning/presentation/widgets/task_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -30,6 +31,7 @@ class _MyAppState extends State<MyApp> {
   List<Event> _myEvents = [];
   int? currentClientId;
   Client? client;
+  int? total;
 
   final Future<String> _calculation = Future<String>.delayed(
     const Duration(seconds: 3),
@@ -48,6 +50,16 @@ class _MyAppState extends State<MyApp> {
     _myEvents = await Event.fetchData(currentClientId!);
     client = await Client.fetchClient(currentClientId!);
   }
+
+  void onChange(int i){
+    //Заглушка для bottom_nav_bar
+    print(i);
+  }
+
+  getTotal(int id) async {
+    total = await Event.fetchNumber(id);
+    print(await Event.fetchNumber(id));
+}
 
   @override
   void initState() {
@@ -74,6 +86,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavBar(selectedIndex: 0, onItemTapped: onChange),
     );
   }
 
@@ -102,8 +115,8 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Search Tasks here',
-                        style: AppTheme.eventPanelHeadline,
+                        'Поиск событий',
+                        style: AppTheme.dateEventPanelText,
                       ),
                     ),
                     Icon(
@@ -131,15 +144,15 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Мои события',
-                style: AppTheme.eventPanelHeadline,
+                'Мои праздники',
+                style: AppTheme.mainPageHeadline,
                 textAlign: TextAlign.start,
               ),
               TextButton(
                 onPressed: () {},
                 child: Text(
                   'Посмотреть все',
-                  style: AppTheme.eventPanelHeadline.withPink,
+                  style: AppTheme.mainPageSmallHeadline,
                 ),
               ),
             ],
@@ -152,13 +165,6 @@ class _MyAppState extends State<MyApp> {
               return taskCategoryGridView(_cats);
             }
             else {
-              // return Container(
-              //   height: MediaQuery.of(context).size.height * 0.3,
-              //   child: Center(
-              //     child: LottieBuilder.asset(Resources.empty,
-              //         height: MediaQuery.of(context).size.height * 0.3),
-              //   ),
-              // );
               return Center(
               child:
                 Column(
@@ -192,7 +198,7 @@ class _MyAppState extends State<MyApp> {
                 tag: Keys.heroStatus + StatusType.ON_GOING.toString(),
                 child: Text(
                   'Предстоящие',
-                  style: AppTheme.eventHeadline.withPurple,
+                  style: AppTheme.mainPageHeadline,
                   textAlign: TextAlign.start,
                 ),
               ),
@@ -200,7 +206,7 @@ class _MyAppState extends State<MyApp> {
                 onPressed: () => {},
                 child: Text(
                   'Посмотреть все',
-                  style: AppTheme.eventPanelHeadline.withPink,
+                  style: AppTheme.mainPageSmallHeadline,
                 ),
               ),
             ],
@@ -212,13 +218,17 @@ class _MyAppState extends State<MyApp> {
           return taskListView(_myEvents);
           }
           else {
-          return Container(
-          height: MediaQuery.of(context).size.height * 0.3,
-          child: Center(
-          child: LottieBuilder.asset(Resources.empty,
-          height: MediaQuery.of(context).size.height * 0.3),
-          ),
-          );
+            return Center(
+                child:
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Image.asset('assets/svg/on_baord_2.svg'),
+                    const SizedBox(height: 80),
+                    Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
+                  ],
+                ));
           }
           }
           )
@@ -246,6 +256,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget taskCategoryItemWidget(EventCategory category) {
+    getTotal(category.id);
+
     return Container(
       decoration: BoxDecoration(
         gradient: AppTheme.getGradientByName(category.color),
@@ -280,7 +292,7 @@ class _MyAppState extends State<MyApp> {
                       tag: Keys.heroTitleCategory + category.id.toString(),
                       child: Text(
                         category.title,
-                        style: AppTheme.eventPanelHeadline.withWhite,
+                        style: AppTheme.eventHeadline,
                         maxLines: category.id.isEven ? 3 : 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -292,8 +304,8 @@ class _MyAppState extends State<MyApp> {
             ),
             SizedBox(height: 16),
             Text(
-              '0 Событий',
-              style: AppTheme.eventPanelHeadline.withWhite,
+              '$total Событий',
+              style: AppTheme.valueEventText,
             ),
           ],
         ),
@@ -325,4 +337,5 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
+
 }

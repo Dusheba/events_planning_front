@@ -57,7 +57,6 @@ class Client {
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(response.body);
-      print(res);
       for (var cl in res) {
         clients.add(Client.fromJson(cl));
       }
