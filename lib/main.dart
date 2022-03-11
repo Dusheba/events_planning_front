@@ -138,7 +138,7 @@ class _MyAppState extends State<MyApp> {
               TextButton(
                 onPressed: () {},
                 child: Text(
-                  'See all',
+                  'Посмотреть все',
                   style: AppTheme.eventPanelHeadline.withPink,
                 ),
               ),
@@ -191,7 +191,7 @@ class _MyAppState extends State<MyApp> {
               Hero(
                 tag: Keys.heroStatus + StatusType.ON_GOING.toString(),
                 child: Text(
-                  'On Going',
+                  'Предстоящие',
                   style: AppTheme.eventHeadline.withPurple,
                   textAlign: TextAlign.start,
                 ),
