@@ -12,7 +12,7 @@ class _BasePageState extends State<BasePage> {
   int _currentBody = 0;
 
   static List<Widget> get bodyList => [
-    DashboardPage(),
+    // DashboardPage(),
     // BagPage(),
     // CalendarPage(),
     // ProfilePage(),
