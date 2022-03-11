@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../database.dart';
 
 class Preference {
   final int id;

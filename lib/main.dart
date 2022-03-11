@@ -10,25 +10,13 @@ import 'package:events_planning/presentation/widgets/task_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:lottie/lottie.dart';
-import 'database.dart';
 import 'package:events_planning/data/client.dart';
-import 'dart:math' as math;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await DBProvider.db.initDB();
-  // Client cl = Client(id:6,name: "hhh", username: "mm", pass: "1",
-  //     phone: "99999", email: "test", social: "aahgag");
-  EventCategory cat = EventCategory(id: 1, title: 'Свадьба', color: 'weddingGradient');
-  EventCategory cat2 = EventCategory(id: 2, title: 'День Рождения', color: 'birthdayGradient');
-  EventCategory cat3 = EventCategory(id: 3, title: 'Вечеринка', color: 'partyGradient');
-  // DBProvider.db.newCategory(cat);
-  // DBProvider.db.newCategory(cat2);
-  // DBProvider.db.newCategory(cat3);
-  Event ev = Event(id:1, categoryId: 2, title: 'ДР', description: 'описание', address: 'адрес', budget:10000, startTime: '2022-03-10', ownerId: 1);
-  Event ev2 = Event(id:2, categoryId: 1, title: 'Свадьба', description: 'описание', address: 'адрес', budget:10000, startTime: '2022-03-13', ownerId: 1);
-  // DBProvider.db.newEvent(ev);
-  // DBProvider.db.newEvent(ev2);
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  preferences.setInt('currentId', 1);
  runApp(MaterialApp(home: MyApp()));
 }
 
@@ -38,23 +26,34 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // data for testing
-  List<Client> testClients = [
-    Client(name: "Raouf", username: "Rahiche", pass: "1", phone: "99999", email: "test", social: "fh"),
-    Client(name: "ete", username: "Rahiche", pass: "1", phone: "99999", email: "test", social: "jf"),
-    Client(name: "Shl", username: "Rahiche", pass: "1", phone: "99999", email: "test", social: "jf"),
-  ];
-  final Future<List<Client>> _clients = DBProvider.db.getAllClients();
-  final Future<List<Event>> _events = DBProvider.db.getAllEvent();
-  final Future<List<EventCategory>> _categories = DBProvider.db.getAllCat();
-  late List<EventCategory> cats;
-  int? totalNum;
+  List<EventCategory> _cats = [];
+  List<Event> _myEvents = [];
+  int? currentClientId;
+  Client? client;
 
-  convertToModels(Future<List<EventCategory>> list) async{
-    cats = await list;
+  final Future<String> _calculation = Future<String>.delayed(
+    const Duration(seconds: 3),
+        () => 'Data Loaded',
+  );
+
+  Future<void> getCurrentClient() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      currentClientId = preferences.getInt('currentId');
+    });
   }
-  convertNumbers(Future<int> number) async {
-    totalNum = await number;
+
+  getData() async{
+    _cats = await EventCategory.fetchData();
+    _myEvents = await Event.fetchData(currentClientId!);
+    client = await Client.fetchClient(currentClientId!);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentClient();
+    getData();
   }
 
   @override
@@ -132,7 +131,7 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'My Tasks',
+                'Мои события',
                 style: AppTheme.eventPanelHeadline,
                 textAlign: TextAlign.start,
               ),
@@ -146,20 +145,31 @@ class _MyAppState extends State<MyApp> {
             ],
           ),
           SizedBox(height: 20),
-          FutureBuilder<List<EventCategory>>(
-          future: _categories,
-          builder: (BuildContext context, AsyncSnapshot<List<EventCategory>> snapshot) {
+          FutureBuilder<String>(
+          future: _calculation,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
-              return taskCategoryGridView(snapshot.data!);
+              return taskCategoryGridView(_cats);
             }
             else {
-              return Container(
-                height: MediaQuery.of(context).size.height * 0.3,
-                child: Center(
-                  child: LottieBuilder.asset(Resources.empty,
-                      height: MediaQuery.of(context).size.height * 0.3),
-                ),
-              );
+              // return Container(
+              //   height: MediaQuery.of(context).size.height * 0.3,
+              //   child: Center(
+              //     child: LottieBuilder.asset(Resources.empty,
+              //         height: MediaQuery.of(context).size.height * 0.3),
+              //   ),
+              // );
+              return Center(
+              child:
+                Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Image.asset('assets/svg/on_baord_2.svg'),
+                  const SizedBox(height: 80),
+                  Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
+                ],
+              ));
             }
           })
           ],
@@ -182,24 +192,24 @@ class _MyAppState extends State<MyApp> {
                 tag: Keys.heroStatus + StatusType.ON_GOING.toString(),
                 child: Text(
                   'On Going',
-                  style: AppTheme.eventHeadline,
+                  style: AppTheme.eventHeadline.withPurple,
                   textAlign: TextAlign.start,
                 ),
               ),
               TextButton(
                 onPressed: () => {},
                 child: Text(
-                  'See all',
+                  'Посмотреть все',
                   style: AppTheme.eventPanelHeadline.withPink,
                 ),
               ),
             ],
           ),
-          FutureBuilder<List<Event>>(
-          future: _events,
-          builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+          FutureBuilder<String>(
+          future: _calculation,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
-          return taskListView(snapshot.data!);
+          return taskListView(_myEvents);
           }
           else {
           return Container(
@@ -236,8 +246,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget taskCategoryItemWidget(EventCategory category) {
-    convertNumbers(DBProvider.db.getEventNumberByCat(category.id));
-    print(totalNum);
     return Container(
       decoration: BoxDecoration(
         gradient: AppTheme.getGradientByName(category.color),
@@ -284,7 +292,7 @@ class _MyAppState extends State<MyApp> {
             ),
             SizedBox(height: 16),
             Text(
-              '$totalNum Events',
+              '0 Событий',
               style: AppTheme.eventPanelHeadline.withWhite,
             ),
           ],
@@ -303,7 +311,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget taskListView(List<Event> data) {
-    convertToModels(DBProvider.db.getAllCat());
     return LiveList.options(
       options: Helper.options,
       itemCount: data.length,
@@ -313,7 +320,7 @@ class _MyAppState extends State<MyApp> {
         final item = data[index];
         return EventItemWidget(
           event: item,
-          category: cats[item.categoryId], animation: animation,
+          category: _cats[item.category.id-1], animation: animation,
         );
       },
     );

@@ -1,5 +1,7 @@
 import 'dart:convert';
-import '../database.dart';
+import 'package:events_planning/data/client.dart';
+import 'package:events_planning/data/entities.dart';
+import 'package:http/http.dart' as http;
 
 Event eventFromJson(String str) {
   final jsonData = json.decode(str);
@@ -13,45 +15,59 @@ String eventToJson(Event event) {
 
 class Event {
   final int? id;
-  final int categoryId;
+  final EventCategory category;
   final String title;
   final String description;
   final String address;
   final double? budget;
-  final String? startTime;
-  final int ownerId;
+  final DateTime? startTime;
+  final Client owner;
 
   Event(
       {this.id,
-        required this.categoryId,
+        required this.category,
         required this.title,
         required this.description,
         required this.address,
         this.budget,
         this.startTime,
-        required this.ownerId}
+        required this.owner}
         );
 
   factory Event.fromJson(Map<String, dynamic> json) => new Event(
       id: json["id"],
-      categoryId: json["categoryId"],
+      category: EventCategory.fromJson(json["category"]),
       title: json["title"],
       description: json["description"],
       address: json["address"],
       budget: json["budget"],
-      startTime: json["startTime"],
-      ownerId: json["ownerId"]
+      startTime: DateTime.fromMicrosecondsSinceEpoch(json["startTime"]),
+      owner: Client.fromJson(json["owner"])
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "categoryId": categoryId,
+    "category": category,
     "title": title,
     "description": description,
     "address": address,
     "budget": budget,
     "startTime": startTime,
-    "ownerId": ownerId
+    "owner": owner
   };
 
+  static Future<List<Event>> fetchData(int id) async {
+    List<Event> events = [];
+    var url = "http://10.0.2.2:8080/api/events/owner?owner=$id";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(utf8.decode(response.bodyBytes));
+      print(res);
+      for (var cl in res) {
+        events.add(Event.fromJson(cl));
+        print(cl);
+      }
+    }
+    return events;
+  }
 }

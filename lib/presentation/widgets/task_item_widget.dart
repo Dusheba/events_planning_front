@@ -41,8 +41,8 @@ class EventItemWidget extends StatelessWidget {
                     SizedBox(width: 8),
                     Text(
                         event.startTime != null
-                            ? DateTime.parse(event.startTime!).format(FormatDate.deadline)
-                            : 'No Date',
+                            ? event.startTime!.format(FormatDate.deadline)
+                            : 'Дата не указан',
                         style: AppTheme.eventPanelHeadline),
                   ],
                 ),
@@ -61,14 +61,14 @@ class EventItemWidget extends StatelessWidget {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: (DateTime.parse(event.startTime!).millisecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch
+                        color: (event.startTime!.millisecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch
                             ? AppTheme.lightOrange
                             : AppTheme.purpleDark)
                             .withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                          DateTime.parse(event.startTime!).millisecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch
+                          event.startTime!.millisecondsSinceEpoch > DateTime.now().microsecondsSinceEpoch
                               ? 'Прошедшее' : 'Предстоящее',
                           style: AppTheme.eventHeadline),
                     ),

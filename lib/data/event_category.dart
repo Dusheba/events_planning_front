@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../database.dart';
+import 'package:http/http.dart' as http;
 
 EventCategory categoryFromJson(String str) {
   final jsonData = json.decode(str);
@@ -34,4 +34,18 @@ class EventCategory {
     "color": color,
   };
 
+
+  static Future<List<EventCategory>> fetchData() async {
+    List<EventCategory> clients = [];
+    var url = "http://10.0.2.2:8080/api/category/all";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(utf8.decode(response.bodyBytes));
+      print(res);
+      for (var cl in res) {
+        clients.add(EventCategory.fromJson(cl));
+      }
+    }
+    return clients;
+  }
 }

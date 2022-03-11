@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 Client clientFromJson(String str) {
   final jsonData = json.decode(str);
@@ -48,5 +50,30 @@ class Client {
     "email": email,
     "social": social
   };
+
+ static Future<List<Client>> fetchData() async {
+    List<Client> clients = [];
+    var url = "http://10.0.2.2:8080/api/clients/all";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(response.body);
+      print(res);
+      for (var cl in res) {
+        clients.add(Client.fromJson(cl));
+      }
+    }
+    return clients;
+  }
+
+  static Future<Client?> fetchClient(int id) async {
+   Client? c;
+   var url = "http://10.0.2.2:8080/api/clients/id?id=$id";
+   var response = await http.get(Uri.parse(url));
+   if (response.statusCode==200) {
+     var res = json.decode(utf8.decode(response.bodyBytes));
+     c = Client.fromJson(res);
+   }
+   return c;
+  }
 
 }
