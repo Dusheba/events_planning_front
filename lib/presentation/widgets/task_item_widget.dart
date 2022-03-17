@@ -2,6 +2,7 @@ import 'package:events_planning/data/entities.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class EventItemWidget extends StatelessWidget {
   final Event event;
@@ -26,7 +27,7 @@ class EventItemWidget extends StatelessWidget {
           padding: EdgeInsets.all(24),
           margin: EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.pinkColorFont.withOpacity(0.06),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
@@ -41,7 +42,7 @@ class EventItemWidget extends StatelessWidget {
                     SizedBox(width: 8),
                     Text(
                         event.startTime != null
-                            ? event.startTime!.format(FormatDate.deadline)
+                            ? DateFormat('HH:mm, MMM dd, yyyy', 'ru').format(event.startTime!)
                             : 'Дата не указана',
                         style: AppTheme.dateEventPanelText),
                   ],
@@ -68,8 +69,7 @@ class EventItemWidget extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                          event.startTime!.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch
-                              ? 'Прошедшее' : 'Предстоящее',
+                          event.description,
                           style: AppTheme.eventPanelHeadline),
                     ),
                   ],

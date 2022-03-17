@@ -6,6 +6,7 @@ class Resources {
   // ICON BOTTOM NAVIGATION BAR ASSETS
   static const String dashboardActive = 'assets/svg/dashboard_active.svg';
   static const String dashboardInactive = 'assets/svg/dashboard_inactive.svg';
+  static const String logo = 'assets/svg/logo.svg';
 
   static const String bagActive = 'assets/svg/bag_active.svg';
   static const String bagInactive = 'assets/svg/bag_inactive.svg';

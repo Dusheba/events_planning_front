@@ -3,6 +3,7 @@ import 'package:events_planning/presentation/pages/pages.dart';
 import 'package:events_planning/presentation/routes/argument_bundle.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/detail_category_task_page.dart';
 import 'page_path.dart';
 
 class PageRouter {
@@ -19,13 +20,13 @@ class PageRouter {
       //   return _buildRoute(settings, OnBoardPage());
       case PagePath.base:
         return _buildRoute(settings, BasePage());
-      // case PagePath.detailCategory:
-      //   return _buildRoute(
-      //     settings,
-      //     DetailCategoryTaskPage(
-      //       bundle: args as ArgumentBundle,
-      //     ),
-      //   );
+      case PagePath.detailCategory:
+        return _buildRoute(
+          settings,
+          DetailCategoryTaskPage(
+            bundle: args as ArgumentBundle,
+          ),
+        );
       // case PagePath.onGoingComplete:
       //   return _buildRoute(
       //     settings,

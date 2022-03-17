@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:events_planning/data/client.dart';
 import 'package:events_planning/data/entities.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 Event eventFromJson(String str) {
   final jsonData = json.decode(str);
@@ -9,6 +10,7 @@ Event eventFromJson(String str) {
 }
 
 String eventToJson(Event event) {
+  //todo: Unhandled Exception: Converting object to an encodable object failed: Instance of 'DateTime'
   final dyn = event.toJson();
   return json.encode(dyn);
 }
@@ -20,7 +22,7 @@ class Event {
   final String description;
   final String address;
   final double? budget;
-  final DateTime? startTime;
+  DateTime? startTime;
   final Client owner;
 
   Event(
@@ -41,7 +43,8 @@ class Event {
       description: json["description"],
       address: json["address"],
       budget: json["budget"],
-      startTime: DateTime.fromMillisecondsSinceEpoch(json["startTime"]),
+      startTime: DateTime.parse(json["startTime"]),
+      // DateTime.fromMillisecondsSinceEpoch(json["startTime"]),
       owner: Client.fromJson(json["owner"])
   );
 
@@ -52,13 +55,13 @@ class Event {
     "description": description,
     "address": address,
     "budget": budget,
-    "startTime": startTime,
+    "startTime": DateFormat('yyyy-MM-dd HH:mm:ss').format(startTime!),
     "owner": owner
   };
 
   static Future<List<Event>> fetchData(int id) async {
     List<Event> events = [];
-    var url = "http://10.0.2.2:8080/api/events/owner?owner=$id";
+    var url = "http://10.0.2.2:8080/api/invitation/client?id=$id";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(utf8.decode(response.bodyBytes));
@@ -71,7 +74,7 @@ class Event {
 
   static Future<List<Event>> fetchEventByCat(int id) async {
     List<Event> events = [];
-    var url = "http://10.0.2.2:8080/api/events/categoty?category=$id";
+    var url = "http://10.0.2.2:8080/api/events/category?category=$id";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(utf8.decode(response.bodyBytes));
@@ -82,9 +85,9 @@ class Event {
     return events;
   }
 
-  static Future<int> fetchNumber(int id) async {
+  static Future<List<Event>> fetchEventByMonth(int month, int id, int cat) async {
     List<Event> events = [];
-    var url = "http://10.0.2.2:8080/api/events/categoty?category=$id";
+    var url = "http://10.0.2.2:8080/api/invitation/client/params?id=$id&cat=$cat&month=$month";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(utf8.decode(response.bodyBytes));
@@ -92,6 +95,14 @@ class Event {
         events.add(Event.fromJson(cl));
       }
     }
-    return events.length;
+    return events;
+  }
+
+  static Future<http.Response> addEvent(Event event) async {
+    return http.post(
+      Uri.parse("http://10.0.2.2:8080/api/events/add"),
+      headers:{"Content-Type": "application/json"},
+      body: eventToJson(event)
+    );
   }
 }

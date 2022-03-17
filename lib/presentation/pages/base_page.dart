@@ -1,6 +1,8 @@
+import 'package:events_planning/presentation/pages/detail_category_task_page.dart';
 import 'package:events_planning/presentation/pages/pages.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BasePage extends StatefulWidget {
@@ -12,9 +14,8 @@ class _BasePageState extends State<BasePage> {
   int _currentBody = 0;
 
   static List<Widget> get bodyList => [
-    // DashboardPage(),
+    DashboardPage(),
     // BagPage(),
-    // CalendarPage(),
     // ProfilePage(),
   ];
 
@@ -31,6 +32,7 @@ class _BasePageState extends State<BasePage> {
     return Scaffold(
       body: _getPage,
       floatingActionButton: Container(
+        margin: EdgeInsets.only(top: 25),
         height: 56,
         width: 56,
         decoration: BoxDecoration(
@@ -41,7 +43,9 @@ class _BasePageState extends State<BasePage> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(56),
           child: Icon(Icons.add, color: Colors.white)
-              // .addRipple(onTap: () => Helper.showBottomSheet(context)),
+              .addRipple(onTap: () =>
+                Helper.showBottomSheet(context))
+          ,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

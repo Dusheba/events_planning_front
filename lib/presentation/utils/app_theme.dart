@@ -4,15 +4,15 @@ class AppTheme {
   static const LinearGradient gradient = LinearGradient(colors: []);
 
   //свадьба плитка
-  static const Color pinkBright = Color.fromRGBO(240, 11, 81, 0.64);
-  static const Color pinkPurple =  Color.fromRGBO(115, 0, 92, 0.64);
+  static const Color pinkBright = Color.fromARGB(163, 240, 11, 81);
+  static const Color pinkPurple =  Color.fromARGB(163, 115, 0, 92);
   static const LinearGradient weddingGradient = LinearGradient(
     colors: [pinkBright, pinkPurple],
   );
 
   //др плитка
-  static const Color purplePink = Color.fromRGBO(248, 105, 213 ,0.67);
-  static const Color purpleDark =  Color.fromRGBO(86, 80, 222, 0.68);
+  static const Color purplePink = Color.fromARGB(171, 248, 105, 213);
+  static const Color purpleDark =  Color.fromARGB(173, 86, 80, 222);
   static const LinearGradient birthdayGradient = LinearGradient(
     colors: [pinkBright, purpleDark],
   );
@@ -48,6 +48,8 @@ class AppTheme {
   static const Color borderPurple = Color.fromRGBO(174, 118, 208, 1.0);
   static const Color panelPink = Color.fromRGBO(248, 105, 148, 0.06);
   static const Color bottomNavigationPurple = Color.fromRGBO(226, 194, 245, 1);
+  static const Color bottomAddSheetDate = Color.fromARGB(179, 80, 80, 222);
+  static const Color addButton = Color.fromARGB(179, 240, 11, 41);
 
   static const Color white = Color(0xFFFBFAFF);
   static const Color black = Color(0xFF000000);
@@ -88,6 +90,11 @@ class AppTheme {
     fontWeight: FontWeight.w700,
   );
 
+  static const TextStyle hintsText = TextStyle(
+    fontSize: 15,
+    color: Color.fromARGB(255, 203, 198, 206)
+  );
+
   static OutlineInputBorder enabledBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
     borderSide: const BorderSide(color: AppTheme.borderPurple),
@@ -119,7 +126,7 @@ class AppTheme {
     ];
   }
 
-  static getGradientByName(String gradient) {
+  static LinearGradient getGradientByName(String gradient) {
     switch (gradient){
       case 'birthdayGradient':
           return birthdayGradient;

@@ -13,21 +13,14 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
-    // _navigateOtherScreen();
+    _navigateOtherScreen();
     super.initState();
   }
 
   void _navigateOtherScreen() {
-    GetStorage _getStorage = GetStorage();
-    bool isInitial = _getStorage.read(Keys.isOnBoardInitial) ?? true;
-    if(isInitial){
-      Future.delayed(Duration(seconds: 3))
-          .then((_) => Navigator.pushReplacementNamed(context, PagePath.onBoard));
-    } else {
-      Future.delayed(Duration(seconds: 3))
+      Future.delayed(Duration(seconds: 2))
           .then((_) => Navigator.pushReplacementNamed(context, PagePath.base));
     }
-  }
 
   @override
   Widget build(BuildContext context) {

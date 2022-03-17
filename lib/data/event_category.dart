@@ -48,4 +48,14 @@ class EventCategory {
     }
     return clients;
   }
+  static Future<EventCategory> fetchCatById(int id) async {
+    EventCategory? cat;
+    var url = "http://10.0.2.2:8080/api/category/id?id=$id";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(utf8.decode(response.bodyBytes));
+      cat = EventCategory.fromJson(res);
+    }
+    return cat!;
+  }
 }
