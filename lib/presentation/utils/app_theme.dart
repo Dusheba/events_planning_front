@@ -61,7 +61,7 @@ class AppTheme {
   );
 
   static const TextStyle mainPageSmallHeadline = TextStyle(
-    fontSize: 10,
+    fontSize: 15,
     color: pinkColorFont,
     fontWeight: FontWeight.w400,
   );
@@ -73,7 +73,7 @@ class AppTheme {
   );
 
   static const TextStyle valueEventText = TextStyle(
-    fontSize: 10,
+    fontSize: 15,
     color: valueEventColor,
     fontWeight: FontWeight.w400,
   );
@@ -89,6 +89,13 @@ class AppTheme {
     color: grey,
     fontWeight: FontWeight.w700,
   );
+  static const TextStyle searchString = TextStyle(
+    fontSize: 15,
+    color: grey,
+    fontWeight: FontWeight.w400,
+  );
+
+
 
   static const TextStyle hintsText = TextStyle(
     fontSize: 15,

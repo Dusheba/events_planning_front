@@ -83,21 +83,23 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/svg/clock.svg
-    - assets/svg/profile_inactive.svg
-    - assets/svg/profile_active.svg
-    - assets/svg/calendar_inactive.svg
-    - assets/svg/calendar_active.svg
-    - assets/svg/dashboard_inactive.svg
-    - assets/svg/dashboard_active.svg
-    - assets/svg/bag_inactive.svg
-    - assets/svg/bag_active.svg
-    - assets/svg/icon_outlined.svg
-    - assets/icon_outlined.svg
-    - assets/svg/date.svg
-    - assets/svg/logo.svg
-    - assets/img/icon_outlined.jpg
-    - assets/lottie/loading.json
+    - assets/svg/
+    - assets/img/
+    - assets/lottie/
+#    - assets/svg/profile_inactive.svg
+#    - assets/svg/profile_active.svg
+#    - assets/svg/calendar_inactive.svg
+#    - assets/svg/calendar_active.svg
+#    - assets/svg/dashboard_inactive.svg
+#    - assets/svg/dashboard_active.svg
+#    - assets/svg/bag_inactive.svg
+#    - assets/svg/bag_active.svg
+#    - assets/svg/icon_outlined.svg
+#    - assets/icon_outlined.svg
+#    - assets/svg/date.svg
+#    - assets/svg/logo.svg
+#    - assets/img/icon_outlined.jpg
+#    - assets/lottie/loading.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

@@ -1,5 +1,4 @@
 import 'package:events_planning/presentation/pages/pages.dart';
-import 'package:events_planning/presentation/pages/pages.dart';
 import 'package:events_planning/presentation/routes/argument_bundle.dart';
 import 'package:flutter/material.dart';
 
@@ -34,8 +33,8 @@ class PageRouter {
       //       bundle: args as ArgumentBundle,
       //     ),
       //   );
-      // case PagePath.search:
-      //   return _buildRoute(settings, SearchPage());
+      case PagePath.search:
+        return _buildRoute(settings, SearchPage());
       default:
         return _errorRoute();
     }

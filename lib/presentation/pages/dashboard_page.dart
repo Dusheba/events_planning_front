@@ -4,11 +4,9 @@ import 'package:events_planning/data/client.dart';
 import 'package:events_planning/data/entities.dart';
 import 'package:events_planning/data/event.dart';
 import 'package:events_planning/data/event_category.dart';
-import 'package:events_planning/presentation/pages/detail_category_task_page.dart';
 import 'package:events_planning/presentation/routes/routes.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/task_item_widget.dart';
-import 'package:events_planning/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -102,7 +100,7 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           Text(
             DateFormat('MMM dd, yyyy', 'ru').format(DateTime.now()),
-            style: AppTheme.dateEventPanelText,
+            style: AppTheme.searchString,
           ),
           SizedBox(width: 20),
           Expanded(
@@ -120,7 +118,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     Expanded(
                       child: Text(
                         'Поиск событий',
-                        style: AppTheme.dateEventPanelText,
+                        style: AppTheme.searchString,
                       ),
                     ),
                     Icon(
