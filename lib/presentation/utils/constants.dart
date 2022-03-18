@@ -20,7 +20,7 @@ class Resources {
   // SVG ASSETS
   static const String icon_outlined = 'assets/img/icon_outlined.png';
   static const String on_board_1 = 'assets/svg/on_board_1.svg';
-  static const String on_board_2 = 'assets/svg/on_board_2.svg';
+  static const String on_board_2 = 'assets/img/on_board_2.png';
   static const String on_board_3 = 'assets/svg/on_board_3.svg';
   static const String clock = 'assets/svg/clock.svg';
   static const String date = 'assets/svg/date.svg';

@@ -213,7 +213,7 @@ class _TaskSheetState extends State<TaskSheet> {
       Event.addEvent(eventItemEntity).then((value) => print(value.statusCode));
       Helper.showCustomSnackBar(
         context,
-        content: 'Success Add Task',
+        content: 'Событие добавлено',
         bgColor: AppTheme.purplePink.lighter(30),
       );
       setState(() {

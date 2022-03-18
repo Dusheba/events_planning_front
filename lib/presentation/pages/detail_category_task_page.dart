@@ -12,6 +12,7 @@ import 'package:events_planning/presentation/widgets/task_item_widget.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailCategoryTaskPage extends StatefulWidget {
@@ -172,9 +173,11 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('img/icon_outlined.jpg'),
+                    Image.asset(
+                    Resources.icon_outlined,
+                  ),
                       const SizedBox(height: 80),
-                      Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
+                      // Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
                     ],
                   ));
             }
@@ -201,9 +204,9 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Image.asset('assets/svg/on_baord_2.svg'),
-                    const SizedBox(height: 80),
-                    Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
+                    LottieBuilder.asset(Resources.loading, ),
+                    const SizedBox(height: 20),
+                    // Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
                   ],
                 ));
           }

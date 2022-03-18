@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -174,9 +175,9 @@ class _DashboardPageState extends State<DashboardPage> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Image.asset('assets/svg/on_baord_2.svg'),
-                          const SizedBox(height: 80),
-                          Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
+                          LottieBuilder.asset(Resources.loading, ),
+                          const SizedBox(height: 20),
+                          // Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
                         ],
                       ));
                 }
@@ -236,9 +237,9 @@ class _DashboardPageState extends State<DashboardPage> {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Image.asset('assets/svg/on_baord_2.svg'),
+                          LottieBuilder.asset(Resources.loading),
                           const SizedBox(height: 80),
-                          Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
+                          // Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
                         ],
                       ));
                 }
