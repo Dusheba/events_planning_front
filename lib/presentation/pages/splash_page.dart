@@ -30,10 +30,10 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
+            Image.asset(
               Resources.icon_outlined,
             ),
-            const SizedBox(height: 80),
+            const SizedBox(height: 100, width: 200),
             // Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
           ],
         ),

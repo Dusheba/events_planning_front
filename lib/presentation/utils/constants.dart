@@ -18,7 +18,7 @@ class Resources {
   static const String profileInactive = 'assets/svg/profile_inactive.svg';
 
   // SVG ASSETS
-  static const String icon_outlined = 'assets/svg/icon_outlined.svg';
+  static const String icon_outlined = 'assets/img/icon_outlined.png';
   static const String on_board_1 = 'assets/svg/on_board_1.svg';
   static const String on_board_2 = 'assets/svg/on_board_2.svg';
   static const String on_board_3 = 'assets/svg/on_board_3.svg';
