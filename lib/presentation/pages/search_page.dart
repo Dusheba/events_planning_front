@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:auto_animated/auto_animated.dart';
 import 'package:events_planning/data/entities.dart';
+import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/search_widget.dart';
+import 'package:events_planning/presentation/widgets/task_item_widget.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -56,11 +59,12 @@ class SearchPageState extends State<SearchPage> {
       children: <Widget>[
         buildSearch(),
         Expanded(
-          child: ListView.builder(
+          child: LiveList.options(
+            options: Helper.options,
             itemCount: events.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, index, animation) {
               final event = events[index];
-              return buildEvent(event);
+              return EventItemWidget(event: event, category: event.category, animation: animation);
             },
           ),
         ),
