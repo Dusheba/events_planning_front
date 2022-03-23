@@ -86,6 +86,7 @@ flutter:
     - assets/svg/
     - assets/img/
     - assets/lottie/
+    - assets/icons/
 #    - assets/svg/profile_inactive.svg
 #    - assets/svg/profile_active.svg
 #    - assets/svg/calendar_inactive.svg

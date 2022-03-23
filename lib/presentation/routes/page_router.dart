@@ -1,4 +1,7 @@
+import 'package:events_planning/presentation/pages/login.dart';
 import 'package:events_planning/presentation/pages/pages.dart';
+import 'package:events_planning/presentation/pages/reg.dart';
+import 'package:events_planning/presentation/pages/welcome.dart';
 import 'package:events_planning/presentation/routes/argument_bundle.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +18,12 @@ class PageRouter {
     switch (settings.name) {
       case PagePath.splash:
         return _buildRoute(settings, SplashPage());
-      // case PagePath.onBoard:
-      //   return _buildRoute(settings, OnBoardPage());
+      case PagePath.welcome:
+        return _buildRoute(settings, WelcomeScreen());
+      case PagePath.auth:
+        return _buildRoute(settings, Login());
+      case PagePath.registration:
+        return _buildRoute(settings, Reg());
       case PagePath.base:
         return _buildRoute(settings, BasePage());
       case PagePath.detailCategory:
@@ -26,6 +33,12 @@ class PageRouter {
             bundle: args as ArgumentBundle,
           ),
         );
+      // case PagePath.welcome:
+      //   return _buildRoute(settings, WelcomeScreen());
+      // case PagePath.auth:
+      //   return _buildRoute(settings, Login());
+      // case PagePath.registration:
+      //   return _buildRoute(settings, Reg());
       // case PagePath.onGoingComplete:
       //   return _buildRoute(
       //     settings,
