@@ -9,6 +9,8 @@ import '../../data/client.dart';
 import '../routes/page_path.dart';
 
 class Reg extends StatelessWidget{
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -18,7 +20,6 @@ class Reg extends StatelessWidget{
     TextEditingController _phoneController = TextEditingController();
     TextEditingController _passwordController1 = TextEditingController();
     TextEditingController _passwordController2 = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
 
 
     Future<bool> checkClient(String login) async {
@@ -124,7 +125,8 @@ class Reg extends StatelessWidget{
     }
 
     return Scaffold(
-        body: Container(
+        body:  SingleChildScrollView (
+        child: Container(
             width: size.width,
             height: size.height,
             decoration: const BoxDecoration(
@@ -143,7 +145,7 @@ class Reg extends StatelessWidget{
                   Container(
                     padding: EdgeInsets.only(top: size.height*0.0008),
                     child: Image.asset(
-                      "icons/apps_icon1.png",
+                      "assets/icons/apps_icon1.png",
                       height: 129,
                       width: 112,
                       //alignment: Alignment.bottomLeft,
@@ -237,6 +239,7 @@ class Reg extends StatelessWidget{
                 ]
             )
         )
+    )
     );
   }
 }

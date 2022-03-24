@@ -9,12 +9,13 @@ import '../routes/page_path.dart';
 //import 'package:encrypt/encrypt.dart';
 
 class Login extends StatelessWidget{
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     TextEditingController _loginController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
-    final _formKey = GlobalKey<FormState>();
 
 
     Widget _input(String lableText,Icon icon, String hint, TextInputType type, bool obscure, TextEditingController controller){
