@@ -59,8 +59,16 @@ class SearchPageState extends State<SearchPage> {
     body: Column(
       children: <Widget>[
         buildSearch(),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(15,0,200,0),
+            child:
+            Text('Найдено событий',
+          style: AppTheme.mainPageSmallHeadline,
+
+        )),
         Expanded(
           child: LiveList.options(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             options: Helper.options,
             itemCount: events.length,
             itemBuilder: (context, index, animation) {
@@ -80,7 +88,7 @@ class SearchPageState extends State<SearchPage> {
   );
 
   Future searchEvent(String query) async => debounce(() async {
-    final events = await Event.fetchData(currentClientId!);
+    final events = await Event.fetchEventByTitle(query, 1);
 
     if (!mounted) return;
 

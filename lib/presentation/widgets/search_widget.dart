@@ -30,7 +30,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     return Row(
       children: [
         Container(
-            margin: const EdgeInsets.fromLTRB(5,23,0,0),
+            margin: const EdgeInsets.fromLTRB(0,23,0,0),
             child: const Icon(Icons.arrow_back, color: AppTheme.borderPurple))
             .addRipple(
           onTap: () => Navigator.pushNamed(context, PagePath.base),
