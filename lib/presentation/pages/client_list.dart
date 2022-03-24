@@ -93,6 +93,12 @@ class _ClientListState extends State<ClientList> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Container(
+              //margin: const EdgeInsets.fromLTRB(0,0,0,0),
+              child: const Icon(Icons.arrow_back, color: AppTheme.borderPurple))
+              .addRipple(
+            onTap: () => Navigator.pushNamed(context, PagePath.base),
+          ),
           Text(
             DateFormat('MMM dd, yyyy', 'ru').format(DateTime.now()),
             style: AppTheme.searchString,

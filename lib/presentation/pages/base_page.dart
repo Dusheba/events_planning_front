@@ -15,6 +15,7 @@ class _BasePageState extends State<BasePage> {
 
   static List<Widget> get bodyList => [
     DashboardPage(),
+    SearchPage()
     // BagPage(),
     // ProfilePage(),
   ];
@@ -23,6 +24,7 @@ class _BasePageState extends State<BasePage> {
     setState(() {
       _currentBody = index;
     });
+    print(bodyList[_currentBody]);
   }
 
   Widget get _getPage => bodyList[_currentBody];

@@ -41,24 +41,14 @@ class BottomNavBar extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   child: SvgPicture.asset(
                     selectedIndex == 1
-                        ? Resources.bagActive
-                        : Resources.bagInactive,
+                        ? Resources.searchActive
+                        : Resources.searchInactive,
                     height: 20,
                     width: 20,
                   ),
                 ),
                 onTap: () => onItemTapped(1),
               ),
-              // Container(
-              //   width: 60,
-              //   height: 60,
-              //   margin: EdgeInsets.only(left: 26, bottom: 3),
-              //   child: FloatingActionButton(
-              //     backgroundColor: Color.fromRGBO(226, 194, 245, 1),
-              //     onPressed: () => {},
-              //     child: Icon(Icons.add),
-              //   ),
-              // ),
               Container(
                 width: 20,
                 height: 20,
