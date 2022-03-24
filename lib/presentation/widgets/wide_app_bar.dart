@@ -1,9 +1,10 @@
 import 'package:events_planning/presentation/utils/utils.dart';
+import 'package:events_planning/presentation/widgets/state_widgets.dart';
 import 'package:flutter_color/flutter_color.dart';
 import 'package:flutter/material.dart';
 
 class WideAppBar extends StatelessWidget {
-  const WideAppBar({
+   WideAppBar({
     Key? key,
     required this.tag,
     required this.title,
@@ -16,6 +17,11 @@ class WideAppBar extends StatelessWidget {
   final LinearGradient gradient;
   final Widget child;
   final List<Widget>? actions;
+
+  final Future<String> _calculation = Future<String>.delayed(
+    const Duration(seconds: 2),
+        () => 'Data Loaded',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +46,23 @@ class WideAppBar extends StatelessWidget {
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: BoxDecoration(
-            gradient: gradient.withDiagonalGradient,
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-          ),
-          child: child,
-        ),
-      ),
+        background: FutureBuilder<String>(
+        future: _calculation,
+    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+    if(snapshot.hasData) {
+    return Container(
+    decoration: BoxDecoration(
+    gradient: gradient.withDiagonalGradient,
+    borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+    ),
+    child: child,
     );
+    }
+    else {
+        return LoadingWidget();
+    }
+    }
+      ),
+    ));
   }
 }

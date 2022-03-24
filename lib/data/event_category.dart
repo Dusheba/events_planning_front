@@ -41,7 +41,6 @@ class EventCategory {
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(utf8.decode(response.bodyBytes));
-      print(res);
       for (var cl in res) {
         clients.add(EventCategory.fromJson(cl));
       }

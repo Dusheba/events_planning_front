@@ -18,12 +18,8 @@ class PageRouter {
     switch (settings.name) {
       case PagePath.splash:
         return _buildRoute(settings, SplashPage());
-      case PagePath.welcome:
-        return _buildRoute(settings, WelcomeScreen());
-      case PagePath.auth:
-        return _buildRoute(settings, Login());
-      case PagePath.registration:
-        return _buildRoute(settings, Reg());
+      // case PagePath.onBoard:
+      //   return _buildRoute(settings, OnBoardPage());
       case PagePath.base:
         return _buildRoute(settings, BasePage());
       case PagePath.detailCategory:
@@ -33,12 +29,14 @@ class PageRouter {
             bundle: args as ArgumentBundle,
           ),
         );
-      // case PagePath.welcome:
-      //   return _buildRoute(settings, WelcomeScreen());
-      // case PagePath.auth:
-      //   return _buildRoute(settings, Login());
-      // case PagePath.registration:
-      //   return _buildRoute(settings, Reg());
+      case PagePath.welcome:
+        return _buildRoute(settings, WelcomeScreen());
+      case PagePath.auth:
+        return _buildRoute(settings, Login());
+      case PagePath.registration:
+        return _buildRoute(settings, Reg());
+      case PagePath.clientList:
+        return _buildRoute(settings, ClientList(bundle: args as ArgumentBundle));
       // case PagePath.onGoingComplete:
       //   return _buildRoute(
       //     settings,
@@ -46,6 +44,7 @@ class PageRouter {
       //       bundle: args as ArgumentBundle,
       //     ),
       //   );
+
       case PagePath.search:
         return _buildRoute(settings, SearchPage());
       default:

@@ -3,6 +3,7 @@ import 'package:events_planning/data/entities.dart';
 import 'package:events_planning/data/entities.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/custom_date/filter_wrapper.dart';
+import 'package:events_planning/presentation/widgets/dialog.dart';
 import 'package:events_planning/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +38,9 @@ class _TaskSheetState extends State<TaskSheet> {
   TimeOfDay? timePicked;
   List<EventCategory>? cats = [];
   Client? owner;
+  double _currentSliderValue = 1000;
+  List<Client> clients = [];
+  List<Client> selectedClients = [];
 
   final Future<String> _calculation = Future<String>.delayed(
     const Duration(seconds: 3),
@@ -45,6 +49,7 @@ class _TaskSheetState extends State<TaskSheet> {
 
   getData() async {
     cats = await EventCategory.fetchData();
+    clients = await Client.fetchData();
     if(widget.categoryId!=null){
       category = await EventCategory.fetchCatById(widget.categoryId!);
     }
@@ -61,8 +66,11 @@ class _TaskSheetState extends State<TaskSheet> {
       titleController = TextEditingController(text: event!.title);
       descriptionController = TextEditingController(text: event!.description);
       addressController = TextEditingController(text: event!.address);
-      selectedCategory = category!.id;
+      selectedCategory = event!.category.id;
       datePicked = event!.startTime;
+      if(event!.budget!=null) {
+        _currentSliderValue = event!.budget!;
+      }
       timePicked = event?.startTime != null
           ? TimeOfDay.fromDateTime(event!.startTime!)
           : null;
@@ -80,66 +88,61 @@ class _TaskSheetState extends State<TaskSheet> {
     super.dispose();
   }
 
-  // _deleteTask() {
-  //   showDialog<bool>(
-  //     context: context,
-  //     builder: (context) => FilterWrapper(
-  //       blurAmount: 5,
-  //       child: AlertDialog(
-  //         title: Text("Delete the task?", style: AppTheme.eventPanelHeadline),
-  //         content: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             GarbageWidget(),
-  //             SizedBox(height: 20),
-  //             Text(
-  //               'Are you sure want to delete the task?',
-  //               style: AppTheme.eventPanelHeadline,
-  //             ),
-  //           ],
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //               onPressed: () => Navigator.pop(context, false),
-  //               child: Text(
-  //                 'Cancel',
-  //                 style: AppTheme.eventPanelHeadline,
-  //               )),
-  //           TextButton(
-  //             onPressed: () {
-  //               context.read<TaskBloc>().add(DeleteTask(id: taskItem.id!));
-  //               Helper.showCustomSnackBar(
-  //                 context,
-  //                 content: 'Success Delete Task',
-  //                 bgColor: AppTheme.redPastel.lighter(30),
-  //               );
-  //               Navigator.pop(context, true);
-  //             },
-  //             child: Text(
-  //               'Delete',
-  //               style: AppTheme.text1.withPurple,
-  //             ),
-  //           ),
-  //         ],
-  //         insetPadding:
-  //         const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         clipBehavior: Clip.antiAlias,
-  //       ),
-  //     ),
-  //   ).then((isDelete) {
-  //     if(isDelete != null && isDelete){
-  //       Navigator.pop(context);
-  //     }
-  //   });
-  // }
-
-  // _markAsDone() {
-  //   isCompleted = true;
-  //   _updateTask();
-  // }
+  _deleteTask() {
+    showDialog<bool>(
+      context: context,
+      builder: (context) => FilterWrapper(
+        blurAmount: 5,
+        child: AlertDialog(
+          title: Text("Удалить событие?", style: AppTheme.eventPanelHeadline),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GarbageWidget(),
+              SizedBox(height: 20),
+              Text(
+                'Вы уверены, что хотите удалить событие?',
+                style: AppTheme.eventPanelHeadline,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(
+                  'Отмена',
+                  style: AppTheme.mainPageSmallHeadline,
+                )),
+            TextButton(
+              onPressed: () {
+                Event.deleteEvent(event!);
+                Helper.showCustomSnackBar(
+                  context,
+                  content: 'Событие успешно удалено',
+                  bgColor: AppTheme.purpleDark,
+                );
+                Navigator.pop(context, true);
+              },
+              child: Text(
+                'Удалить',
+                style: AppTheme.mainPageSmallHeadline,
+              ),
+            ),
+          ],
+          insetPadding:
+          const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          clipBehavior: Clip.antiAlias,
+        ),
+      ),
+    ).then((isDelete) {
+      if(isDelete != null && isDelete){
+        Navigator.pop(context);
+      }
+    });
+  }
 
   _updateTask() {
     if (_formKey.currentState!.validate()) {
@@ -148,8 +151,8 @@ class _TaskSheetState extends State<TaskSheet> {
         title: titleController.text,
         description: descriptionController.text,
         category: cats![selectedCategory!-1],
-        address: event!.address,
-        budget: event!.budget,
+        address: addressController.text,
+        budget: _currentSliderValue,
         owner: owner!
       );
       if (datePicked != null) {
@@ -165,16 +168,17 @@ class _TaskSheetState extends State<TaskSheet> {
           title: titleController.text,
           description: descriptionController.text,
           category: cats![selectedCategory!-1],
-          address: titleController.text,
+          address: addressController.text,
+          budget: _currentSliderValue,
           startTime: savedDeadline.toLocal(),
           owner: owner!
         );
       }
-      // context.read<TaskBloc>().add(UpdateTask(taskItemEntity: taskItemEntity));
-      Event.addEvent(eventItemEntity);
+      Event.updateEvent(eventItemEntity);
+      Client.invite(selectedClients, eventItemEntity).then((value) => print(value.statusCode));
       Helper.showCustomSnackBar(
         context,
-        content: 'Success Update Task',
+        content: 'Событие успешно обновлено',
         bgColor: AppTheme.purpleDark,
       );
       Navigator.pop(context);
@@ -189,7 +193,7 @@ class _TaskSheetState extends State<TaskSheet> {
           description: descriptionController.text,
           category: cats![selectedCategory!-1],
           address: addressController.text,
-          budget: 1000,
+          budget: _currentSliderValue,
           owner: owner!
       );
       if (datePicked != null) {
@@ -206,11 +210,14 @@ class _TaskSheetState extends State<TaskSheet> {
             description: descriptionController.text,
             category: cats![selectedCategory!-1],
             address: addressController.text,
+            budget: _currentSliderValue,
             startTime: savedDeadline,
             owner: owner!
         );
       }
-      Event.addEvent(eventItemEntity).then((value) => print(value.statusCode));
+      // Event.addEvent(eventItemEntity).then((value) => print(value.statusCode));
+      selectedClients.add(owner!);
+      Client.invite(selectedClients, eventItemEntity).then((value) => print(value.statusCode));
       Helper.showCustomSnackBar(
         context,
         content: 'Событие добавлено',
@@ -279,15 +286,15 @@ class _TaskSheetState extends State<TaskSheet> {
                           MainAxisAlignment.spaceBetween,
                           children: [
                             GestureDetector(
-                              child: SvgPicture.asset(
-                                Resources.trash,
+                              child: Image.asset(
+                                Resources.deleteImage,
                                 height: 20,
                                 width: 20,
                               ),
-                              onTap: ()=>{}
-                              // _deleteTask,
+                              onTap:
+                                _deleteTask
                             ),
-                            Text('Update Task',
+                            Text('Update Event',
                                 style: AppTheme.mainPageHeadline),
                             GestureDetector(
                               child: SvgPicture.asset(
@@ -300,7 +307,7 @@ class _TaskSheetState extends State<TaskSheet> {
                           ],
                         )
                             : Center(
-                          child: Text('Add Task',
+                          child: Text('Add Event',
                               style: AppTheme.mainPageHeadline),
                         ),
                         SizedBox(height: 20),
@@ -362,6 +369,37 @@ class _TaskSheetState extends State<TaskSheet> {
                           maxLines: 5,
                           scrollPhysics: BouncingScrollPhysics(),
                         ),
+                        SizedBox(height: 20),
+                        Slider(
+                          value: _currentSliderValue,
+                          max: 1000000,
+                          activeColor: AppTheme.bottomAddSheetDate,
+                          inactiveColor: AppTheme.bottomAddSheetDate,
+                          divisions: 500,
+                          label: _currentSliderValue.toString(),
+                          onChanged: (double value) {
+                            setState(() {
+                              _currentSliderValue = value;
+                            });
+                          },
+                        ),
+                        Text('Бюджет', style: AppTheme.hintsText,),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                            child: Text('Пригласить гостей'),
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(AppTheme.bottomAddSheetDate)
+                            ),
+                            onPressed: () async {
+                              selectedClients = await showDialog<List<Client>>(
+                                  context: context,
+                                  builder: (_) => MultiSelectDialog(
+                                      question: Text('Выберете пользователей'),
+                                      answers: clients)) ??
+                                  [];
+                              print(selectedClients);
+                      // Logic to save selected flavours in the database
+                        }),
                         SizedBox(height: 20),
                         Row(children: [
                           Expanded(
@@ -457,10 +495,10 @@ class _TaskSheetState extends State<TaskSheet> {
                         SizedBox(height: 20),
                         PinkButton(
                           text: widget.isUpdate
-                              ? 'Mark as Done'
+                              ? 'Обновить'
                               : 'Сохранить',
                           onTap:
-                          widget.isUpdate ? _saveTask() : _saveTask,
+                          widget.isUpdate ? _updateTask : _saveTask,
                         ),
                         SizedBox(height: 20),
                       ],

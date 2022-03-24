@@ -29,6 +29,11 @@ class Resources {
 
   // IMAGE ASSETS
   static const String avatarImage = 'assets/img/avatar_img.jpg';
+  static const String deleteImage = 'assets/img/delete.jpg';
+  static const String apps_icon = 'assets/icons/apps_icon1.png';
+  static const String apple = 'assets/icons/apple.png';
+  static const String fry = 'assets/icons/fry.png';
+  static const String pizza = 'assets/icons/pizza.png';
 
   // LOTTIE ASSETS
   static const String loading = 'assets/lottie/loading.json';
@@ -42,6 +47,7 @@ class Keys {
   static const String isInitial = 'isInitial';
   static const String isOnBoardInitial = 'isOnBoardInitial';
   static const String categoryItem = 'categoryItem';
+  static const String eventId = 'eventId';
   static const String totalTasks = 'totalTasks';
   static const String completeTasks = 'completeTasks';
   static const String index = 'index';
@@ -50,6 +56,7 @@ class Keys {
   static const String statusType = 'statusType';
 
   static const String heroSearch = 'Search Hero';
+
 }
 
 class FormatDate {

@@ -10,7 +10,6 @@ Event eventFromJson(String str) {
 }
 
 String eventToJson(Event event) {
-  //todo: Unhandled Exception: Converting object to an encodable object failed: Instance of 'DateTime'
   final dyn = event.toJson();
   return json.encode(dyn);
 }
@@ -95,6 +94,7 @@ class Event {
         events.add(Event.fromJson(cl));
       }
     }
+    print(events);
     return events;
   }
 
@@ -116,6 +116,22 @@ class Event {
       Uri.parse("http://10.0.2.2:8080/api/events/add"),
       headers:{"Content-Type": "application/json"},
       body: eventToJson(event)
+    );
+  }
+
+  static Future<http.Response> updateEvent(Event event) async {
+    return http.put(
+        Uri.parse("http://10.0.2.2:8080/api/events/update"),
+        headers:{"Content-Type": "application/json"},
+        body: eventToJson(event)
+    );
+  }
+
+  static Future<http.Response> deleteEvent(Event event) async {
+    return http.delete(
+      Uri.parse("http://10.0.2.2:8080/api/events/delete"),
+        headers:{"Content-Type": "application/json"},
+        body: eventToJson(event)
     );
   }
 }

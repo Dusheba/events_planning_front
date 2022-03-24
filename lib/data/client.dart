@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:events_planning/data/event.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -53,7 +54,6 @@ class Client {
 
  static Future<List<Client>> fetchData() async {
     List<Client> clients = [];
-    //var url = "http://localhost:8080/api/clients/all";
     var url = "http://10.0.2.2:8080/api/clients/all";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
@@ -67,7 +67,6 @@ class Client {
 
   static Future<Client?> fetchClient(int id) async {
    Client? c;
-   //var url = "http://localhost:8080/api/clients/id?id=$id";
    var url = "http://10.0.2.2:8080/api/clients/id?id=$id";
    var response = await http.get(Uri.parse(url));
    if (response.statusCode==200) {
@@ -77,12 +76,38 @@ class Client {
    return c;
   }
 
+  static Future<http.Response> invite(List<Client> clients, Event event) async {
+   return http.post(
+   Uri.parse("http://10.0.2.2:8080/api/invite"),
+  body: jsonEncode({
+    "clients": clients,
+    "event": event
+  }
+  ),
+     headers: {"Content-Type": "application/json"}
+   );
+}
+
+static Future<List<Client>> fetchByEvent(int id) async {
+  List<Client> clients = [];
+  var url = "http://10.0.2.2:8080/api/invitation/event?id=$id";
+  var response = await http.get(Uri.parse(url));
+  if (response.statusCode==200){
+    var res = json.decode(response.body);
+    for (var cl in res) {
+      clients.add(Client.fromJson(cl));
+    }
+  }
+  return clients;
+}
+
   static Future<http.Response> addClient(Client client) async {
     return http.post(
-        //Uri.parse("http://localhost:8080/api/client/add"),
+      //Uri.parse("http://localhost:8080/api/client/add"),
         Uri.parse("http://10.0.2.2:8080/api/client/add"),
         headers: {"Content-Type": "application/json"},
         body: clientToJson(client)
     );
   }
- }
+
+}

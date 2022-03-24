@@ -1,8 +1,12 @@
 import 'package:events_planning/data/entities.dart';
+import 'package:events_planning/presentation/routes/argument_bundle.dart';
+import 'package:events_planning/presentation/routes/page_path.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
+import 'package:events_planning/presentation/widgets/task_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class EventItemWidget extends StatelessWidget {
   final Event event;
@@ -23,6 +27,21 @@ class EventItemWidget extends StatelessWidget {
           end: 1,
         ).animate(animation),
       child: GestureDetector(
+        onTap: () {
+          showCupertinoModalBottomSheet(
+            expand: false,
+            context: context,
+            enableDrag: true,
+            topRadius: Radius.circular(20),
+            backgroundColor: Colors.transparent,
+            builder: (context) =>
+                TaskSheet(
+                    isUpdate: true,
+                    event: event,
+                    categoryId: category.id,
+                ),
+          );
+        },
         child: Container(
           padding: EdgeInsets.all(24),
           margin: EdgeInsets.symmetric(vertical: 12),
@@ -72,6 +91,23 @@ class EventItemWidget extends StatelessWidget {
                           event.description,
                           style: AppTheme.eventPanelHeadline),
                     ),
+                    SizedBox(width: 8),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppTheme.grey.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text('Гости', style: AppTheme.eventPanelHeadline)
+                    ).addRipple(onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        PagePath.clientList,
+                        arguments: ArgumentBundle(extras: {
+                          Keys.eventId: event.id,
+                        }, identifier: 'client list'),
+                      );
+                    }),
                   ],
                 ),
               ],

@@ -5,6 +5,7 @@ import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/bottom_nav_bar.dart';
 import 'package:events_planning/presentation/widgets/buttons.dart';
 import 'package:events_planning/presentation/widgets/custom_calendar/src/calendar_timeline.dart';
+import 'package:events_planning/presentation/widgets/state_widgets.dart';
 import 'package:events_planning/presentation/widgets/wide_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,8 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
   ValueNotifier<int> totalTasks = ValueNotifier(0);
   late int index = widget.bundle.extras[Keys.index];
   List<Event> _eventsWithCat = [];
+  List<Event> next = [];
+  List<Event> archive = [];
   int? currentClientId;
 
   final Future<String> _calculation = Future<String>.delayed(
@@ -60,8 +63,8 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting();
     fetchData(DateTime.now().month, index);
+    initializeDateFormatting();
     totalTasks = ValueNotifier(_eventsWithCat.length);
   }
 
@@ -73,7 +76,7 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       body: FutureBuilder<String>(
         future: _calculation,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -96,9 +99,7 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
                   ),
                   IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () => {}
-                  //todo: modal add event
-                  ),
+                  onPressed: () => Helper.showBottomSheet(context)),
                   ],
                   child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -149,37 +150,26 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
                     ,
                     leftMargin: 20,
                     monthColor: Colors.blueGrey,
-                    dayColor: AppTheme.borderPurple,
+                    dayColor: Color.fromARGB(168, 255, 255, 255),
                     activeDayColor: AppTheme.white,
-                    activeBackgroundDayColor: AppTheme.darkBorderPurple,
+                    activeBackgroundDayColor: AppTheme.bottomNavigationPurple,
                     dotsColor: Color(0xFF333A47),
                     locale: 'ru',
                     ),
                     ],
                     ),
                     ),
-                    SliverList(
-                    delegate: SliverChildListDelegate([
-                    _taskList(),
-                    ]),
-                    ),
+                      SliverList(
+                      delegate: SliverChildListDelegate([
+                      _taskList(),
+                      ]),
+                      )
+
                     ],
             );
           }
             else {
-              return Center(
-                  child:
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    Image.asset(
-                    Resources.icon_outlined,
-                  ),
-                      const SizedBox(height: 80),
-                      // Text('ИВЕНТ', style: AppTheme.mainPageHeadline),
-                    ],
-                  ));
+              return LoadingWidget();
             }
         }
       ),

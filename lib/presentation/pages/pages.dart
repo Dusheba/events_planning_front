@@ -8,3 +8,4 @@ export 'dashboard_page.dart';
 // export 'on_going_complete_page.dart';
 // export 'profile_page.dart';
 export 'splash_page.dart';
+export 'client_list.dart';

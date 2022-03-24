@@ -46,7 +46,6 @@ class _DashboardPageState extends State<DashboardPage> {
     _cats = await EventCategory.fetchData();
     _myEvents = await Event.fetchData(currentClientId!);
     current = _myEvents;
-
     if (!isAll) {
       current.removeWhere((element) =>
       element.startTime!.millisecondsSinceEpoch <= DateTime
@@ -57,6 +56,7 @@ class _DashboardPageState extends State<DashboardPage> {
     for (var i = 0; i < _cats.length; i++) {
       _eventsByCat.add(await Event.fetchEventByCat(_cats[i].id));
     }
+
   }
 
   void onChange(int i) {

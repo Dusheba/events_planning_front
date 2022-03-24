@@ -46,7 +46,7 @@ class AppTheme {
   static const Color grey = Color.fromRGBO(203, 198, 206, 1);
   static const Color darkBorderPurple = Color.fromRGBO(162, 83, 210, 1.0);
   static const Color borderPurple = Color.fromRGBO(174, 118, 208, 1.0);
-  static const Color panelPink = Color.fromRGBO(248, 105, 148, 0.06);
+  static const Color panelPink = Color.fromARGB(15, 248, 105, 148);
   static const Color bottomNavigationPurple = Color.fromRGBO(226, 194, 245, 1);
   static const Color bottomAddSheetDate = Color.fromARGB(179, 80, 80, 222);
   static const Color addButton = Color.fromARGB(179, 240, 11, 41);

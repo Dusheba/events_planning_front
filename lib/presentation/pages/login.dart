@@ -1,4 +1,5 @@
 import 'package:events_planning/data/client.dart';
+import 'package:events_planning/presentation/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -78,14 +79,15 @@ class Login extends StatelessWidget{
 
 
     void submit() {
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      // SystemChannels.textInput.invokeMethod('TextInput.hide');
       if (_formKey.currentState!.validate()) {
         searchClient(_loginController.text, _passwordController.text);
       }
     }
 
     return Scaffold(
-        body: Container(
+        body:  SingleChildScrollView (
+        child: Container(
             width: size.width,
             height: size.height,
             decoration: const BoxDecoration(
@@ -104,10 +106,15 @@ class Login extends StatelessWidget{
                   Container(
                     padding: EdgeInsets.only(top: size.height*0.0008),
                     child: Image.asset(
-                      "icons/apps_icon1.png",
+                      Resources.apps_icon,
                       height: 129,
                       width: 112,
                     ),
+                    // child: Image.asset(
+                    //   "icons/apps_icon1.png",
+                    //   height: 129,
+                    //   width: 112,
+                    // ),
                   ),
                   Container(
                       //height: size.height*0.75,
@@ -190,6 +197,6 @@ class Login extends StatelessWidget{
                 ]
             )
         )
-    );
+    ));
   }
 }
