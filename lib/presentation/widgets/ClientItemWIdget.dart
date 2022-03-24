@@ -38,34 +38,14 @@ class ClientItemWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text('Юзернэйм: ' + client.username, style: AppTheme.eventPanelHeadline),
+                Text(client.username, style: AppTheme.mainPageHeadline),
                 SizedBox(height: 16),
                 Text('Имя: ' + client.name, style: AppTheme.eventPanelHeadline),
                 SizedBox(height: 16),
-                Wrap(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppTheme.grey.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(client.email, style: AppTheme.eventPanelHeadline),
-                    ),
-                    SizedBox(width: 8),
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppTheme.grey
-                            .withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                          client.phone,
-                          style: AppTheme.eventPanelHeadline),
-                    ),
-                  ],
-                ),
+                Text('Телефон: ' + client.phone, style: AppTheme.eventPanelHeadline),
+                SizedBox(height: 16),
+                Text('E-mail: ' + client.email, style: AppTheme.eventPanelHeadline),
+                SizedBox(height: 16),
                 Container(
                   height: 50,
                   child: ListView.builder(

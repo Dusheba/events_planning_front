@@ -59,11 +59,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   }
 
-  void onChange(int i) {
-    //Заглушка для bottom_nav_bar
-    print(i);
-  }
-
   @override
   void initState() {
     super.initState();
