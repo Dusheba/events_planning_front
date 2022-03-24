@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void _navigateOtherScreen() {
       Future.delayed(Duration(seconds: 2))
-          .then((_) => Navigator.pushReplacementNamed(context, PagePath.welcome));
+          .then((_) => Navigator.pushReplacementNamed(context, PagePath.base));
     }
 
   @override
@@ -30,8 +30,12 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              Resources.icon_outlined,
+            Container(
+              height: 200,
+              width: 300,
+              child: Image.asset(
+                Resources.icon_outlined,
+              ),
             ),
             const SizedBox(height: 100, width: 200),
             // Text('ИВЕНТ', style: AppTheme.mainPageHeadline),

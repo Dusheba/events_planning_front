@@ -9,5 +9,7 @@ class PagePath{
   static const String welcome = '/welcome';
   static const String registration = '/registration';
   static const String auth = '/auth';
+  static const String profile = '/profile';
+  static const String about_app = '/about_app';
 
 }

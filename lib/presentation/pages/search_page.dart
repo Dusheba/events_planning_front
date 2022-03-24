@@ -5,7 +5,6 @@ import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/search_widget.dart';
 import 'package:events_planning/presentation/widgets/task_item_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
   @override

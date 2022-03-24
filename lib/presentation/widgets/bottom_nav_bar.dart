@@ -1,3 +1,4 @@
+import 'package:events_planning/presentation/routes/routes.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,51 +35,66 @@ class BottomNavBar extends StatelessWidget {
                     width: 20,
                   ),
                 ),
-                onTap: () => onItemTapped(0),
+                onTap: () => {
+                  Navigator.pushNamed(context, PagePath.base)
+                }
               ),
-              GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: SvgPicture.asset(
-                    selectedIndex == 1
-                        ? Resources.searchActive
-                        : Resources.searchInactive,
-                    height: 20,
-                    width: 20,
-                  ),
-                ),
-                onTap: () => onItemTapped(1),
-              ),
+              // GestureDetector(
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(16),
+              //     child: SvgPicture.asset(
+              //       selectedIndex == 1
+              //           ? Resources.bagActive
+              //           : Resources.bagInactive,
+              //       height: 20,
+              //       width: 20,
+              //     ),
+              //   ),
+              //   onTap: () => onItemTapped(1),
+              // ),
+
+              // Container(
+              //   width: 60,
+              //   height: 60,
+              //   margin: EdgeInsets.only(left: 26, bottom: 3),
+              //   child: FloatingActionButton(
+              //     backgroundColor: Color.fromRGBO(226, 194, 245, 1),
+              //     onPressed: () => {},
+              //     child: Icon(Icons.add),
+              //   ),
+              // ),
               Container(
                 width: 20,
                 height: 20,
                 padding: const EdgeInsets.all(16),
               ),
+              // GestureDetector(
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(16),
+              //     child: SvgPicture.asset(
+              //       selectedIndex == 2
+              //           ? Resources.calendarActive
+              //           : Resources.calendarInactive,
+              //       height: 20,
+              //       width: 20,
+              //     ),
+              //   ),
+              //   onTap: () => onItemTapped(2),
+              // ),
               GestureDetector(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: SvgPicture.asset(
-                    selectedIndex == 2
-                        ? Resources.calendarActive
-                        : Resources.calendarInactive,
-                    height: 20,
-                    width: 20,
-                  ),
-                ),
-                onTap: () => onItemTapped(2),
-              ),
-              GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: SvgPicture.asset(
-                    selectedIndex == 3
+                    selectedIndex == 1
                         ? Resources.profileActive
                         : Resources.profileInactive,
                     height: 20,
                     width: 20,
                   ),
                 ),
-                onTap: () => onItemTapped(3),
+                onTap: () =>  {
+                  Navigator.pushNamed(context, PagePath.profile)
+                }
               ),
             ],
           ),

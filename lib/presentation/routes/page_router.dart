@@ -1,5 +1,6 @@
 import 'package:events_planning/presentation/pages/login.dart';
 import 'package:events_planning/presentation/pages/pages.dart';
+import 'package:events_planning/presentation/pages/profile_page.dart';
 import 'package:events_planning/presentation/pages/reg.dart';
 import 'package:events_planning/presentation/pages/welcome.dart';
 import 'package:events_planning/presentation/routes/argument_bundle.dart';
@@ -22,6 +23,10 @@ class PageRouter {
       //   return _buildRoute(settings, OnBoardPage());
       case PagePath.base:
         return _buildRoute(settings, BasePage());
+      case PagePath.profile:
+        return _buildRoute(settings, ProfilePage());
+      case PagePath.about_app:
+        return _buildRoute(settings, AboutAppPage());
       case PagePath.detailCategory:
         return _buildRoute(
           settings,
@@ -29,12 +34,12 @@ class PageRouter {
             bundle: args as ArgumentBundle,
           ),
         );
-      case PagePath.welcome:
-        return _buildRoute(settings, WelcomeScreen());
-      case PagePath.auth:
-        return _buildRoute(settings, Login());
-      case PagePath.registration:
-        return _buildRoute(settings, Reg());
+      // case PagePath.welcome:
+      //   return _buildRoute(settings, WelcomeScreen());
+      // case PagePath.auth:
+      //   return _buildRoute(settings, Login());
+      // case PagePath.registration:
+      //   return _buildRoute(settings, Reg());
       case PagePath.clientList:
         return _buildRoute(settings, ClientList(bundle: args as ArgumentBundle));
       // case PagePath.onGoingComplete:

@@ -48,10 +48,10 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
     });
   }
 
-  void onChange(int i){
-    //Заглушка для bottom_nav_bar
-    print(i);
-  }
+  // void onChange(int i){
+  //   //Заглушка для bottom_nav_bar
+  //   print(i);
+  // }
 
   fetchData(int month, int cat) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -173,7 +173,7 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
             }
         }
       ),
-      bottomNavigationBar: BottomNavBar(selectedIndex: 0, onItemTapped: onChange),
+      // bottomNavigationBar: BottomNavBar(selectedIndex: 0, onItemTapped: onChange),
     );
   }
 
