@@ -55,6 +55,7 @@ class Client {
  static Future<List<Client>> fetchData() async {
     List<Client> clients = [];
     var url = "http://10.0.2.2:8080/api/clients/all";
+    //var url = "http://localhost:8080/api/clients/all";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(response.body);
@@ -68,6 +69,7 @@ class Client {
   static Future<Client?> fetchClient(int id) async {
    Client? c;
    var url = "http://10.0.2.2:8080/api/clients/id?id=$id";
+   //var url = "http://localhost:8080/api/clients/id?id=$id";
    var response = await http.get(Uri.parse(url));
    if (response.statusCode==200) {
      var res = json.decode(utf8.decode(response.bodyBytes));
@@ -103,9 +105,27 @@ static Future<List<Client>> fetchByEvent(int id) async {
 
   static Future<http.Response> addClient(Client client) async {
     return http.post(
-      //Uri.parse("http://localhost:8080/api/client/add"),
-        Uri.parse("http://10.0.2.2:8080/api/client/add"),
+        Uri.parse("http://localhost:8080/api/client/add"),
+        //Uri.parse("http://10.0.2.2:8080/api/client/add"),
         headers: {"Content-Type": "application/json"},
+        body: clientToJson(client)
+    );
+  }
+
+  static Future<http.Response> updateClient(Client client) async {
+    return http.put(
+        Uri.parse("http://10.0.2.2:8080/api/client/update"),
+        //Uri.parse("http://localhost:8080/api/client/update"),
+        headers:{"Content-Type": "application/json"},
+        body: clientToJson(client)
+    );
+  }
+
+  static Future<http.Response> deleteClient(Client client) async {
+    return http.delete(
+        Uri.parse("http://10.0.2.2:8080/api/client/delete"),
+        //Uri.parse("http://localhost:8080/api/client/delete"),
+        headers:{"Content-Type": "application/json"},
         body: clientToJson(client)
     );
   }

@@ -11,5 +11,5 @@ class PagePath{
   static const String auth = '/auth';
   static const String profile = '/profile';
   static const String about_app = '/about_app';
-
+  static const String editProfile = '/edit_profile';
 }

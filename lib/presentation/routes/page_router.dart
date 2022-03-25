@@ -1,3 +1,4 @@
+import 'package:events_planning/presentation/pages/edit_profile.dart';
 import 'package:events_planning/presentation/pages/login.dart';
 import 'package:events_planning/presentation/pages/pages.dart';
 import 'package:events_planning/presentation/pages/profile_page.dart';
@@ -42,6 +43,8 @@ class PageRouter {
         return _buildRoute(settings, Reg());
       case PagePath.clientList:
         return _buildRoute(settings, ClientList(bundle: args as ArgumentBundle));
+      case PagePath.editProfile:
+        return _buildRoute(settings, EditProfilePage());
       // case PagePath.onGoingComplete:
       //   return _buildRoute(
       //     settings,

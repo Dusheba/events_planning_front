@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:events_planning/data/client.dart';
 import 'package:events_planning/data/entities.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/client.dart';
 import '../routes/page_path.dart';
 
@@ -98,6 +99,20 @@ class Reg extends StatelessWidget{
       );
     }
 
+    Future searchClient(String login, String password) async{
+      final clients = await Client.fetchData();
+      for (Client client in clients){
+        if(client.username==login&&client.pass==password){
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          preferences.setInt('currentId', client.id!);
+          return ;
+        }
+        else{
+          return print("пользователь не найден...");
+        }
+      }
+    }
+
     Future<void> submit() async {
       SystemChannels.textInput.invokeMethod('TextInput.hide');
       if (_formKey.currentState!.validate()) {
@@ -119,6 +134,7 @@ class Reg extends StatelessWidget{
           _phoneController.clear();
           _passwordController1.clear();
           _passwordController2.clear();
+          searchClient(client.username, client.pass);
           Navigator.pushReplacementNamed(context, PagePath.base);
         }
       }
