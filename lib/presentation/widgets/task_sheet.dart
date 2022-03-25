@@ -335,7 +335,7 @@ class _TaskSheetState extends State<TaskSheet> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your title task';
+                              return 'Введите название';
                             }
                             return null;
                           },
@@ -356,7 +356,7 @@ class _TaskSheetState extends State<TaskSheet> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your address task';
+                              return 'Введите адрес';
                             }
                             return null;
                           },
@@ -481,7 +481,7 @@ class _TaskSheetState extends State<TaskSheet> {
                           ),
                           validator: (value) {
                             if (value == null) {
-                              return 'Please fill in category';
+                              return 'Выберете категорию';
                             }
                             return null;
                           },
