@@ -5,6 +5,7 @@ import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/search_widget.dart';
 import 'package:events_planning/presentation/widgets/task_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -15,19 +16,17 @@ class SearchPageState extends State<SearchPage> {
   List<Event> events = [];
   String query = '';
   Timer? debouncer;
-  int? currentClientId = 1; //как айдюк передавать??
+  int? currentClientId;
 
-  // Future<void> getCurrentClient() async {
+  // Future searchClient() async{
   //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     currentClientId = preferences.getInt('currentId');
-  //   });
+  //   currentClientId = preferences.getInt('currentId')!;
   // }
 
   @override
   void initState() {
     super.initState();
-
+    // searchClient();
     init();
   }
 
@@ -49,7 +48,10 @@ class SearchPageState extends State<SearchPage> {
   }
 
   Future init() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    currentClientId = preferences.getInt('currentId')!;
     final events = await Event.fetchData(currentClientId!);
+    print(currentClientId);
     setState(() => this.events = events);
   }
 
