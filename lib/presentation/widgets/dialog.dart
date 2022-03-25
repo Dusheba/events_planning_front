@@ -1,34 +1,57 @@
+import 'dart:async';
+
 import 'package:events_planning/data/client.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
 import '../utils/app_theme.dart';
 
 /// A Custom Dialog that displays a single question & list of answers.
-class MultiSelectDialog extends StatelessWidget {
+class MultiSelectDialog extends StatefulWidget {
   /// List to display the answer.
-  final List<Client> answers;
+  List<Client> answers =[];
 
   final Widget question;
   final List<Client> selectedItems = [];
   static Map<Client, bool>? mappedItem;
-  TextEditingController searchController = TextEditingController();
+  final List<int> invitedClient;
 
-  MultiSelectDialog({Key? key, required this.answers, required this.question}) : super(key: key);
+  MultiSelectDialog(
+      {Key? key, required this.answers, required this.question, required this.invitedClient})
+      : super(key: key);
 
+  @override
+  State<MultiSelectDialog> createState() => MultiSelectDialogState();
+
+}
+
+  class MultiSelectDialogState extends State<MultiSelectDialog>{
   /// Function that converts the list answer to a map.
+    static Map<Client, bool>? mappedItem;
+    TextEditingController searchController = TextEditingController();
+    Timer? debouncer;
   Map<Client, bool> initMap() {
-    print(answers);
-    return mappedItem = Map.fromIterable(answers,
-        key: (k) => k,
-        value: (v) {
-          if (v != true && v != false)
-            return false;
-          else
-            return v as bool;
-        });
+    return mappedItem = { for (var item in widget.answers) item :  widget.invitedClient.contains(item.id)};
   }
+
+    void debounce(
+        VoidCallback callback, {
+          Duration duration = const Duration(milliseconds: 1000),
+        }) {
+      if (debouncer != null) {
+        debouncer!.cancel();
+      }
+
+      debouncer = Timer(duration, callback);
+    }
+
+  Future searchClient(String val) async => debounce(() async {
+    initMap();
+    setState((){
+      mappedItem!.removeWhere((key, value) => !key.username.startsWith(val));
+    });
+  });
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +59,7 @@ class MultiSelectDialog extends StatelessWidget {
       initMap();
     }
     return SimpleDialog(
-      title: question,
+      title: widget.question,
       contentPadding: EdgeInsets.all(10),
       children: [
         TextFormField(
@@ -52,6 +75,10 @@ class MultiSelectDialog extends StatelessWidget {
                   )
               )
           ),
+          textInputAction: TextInputAction.search,
+          onChanged: (val) {
+            searchClient(val);
+          },
         ),
         ...mappedItem!.keys.map((Client key) {
           return StatefulBuilder(
@@ -70,17 +97,17 @@ class MultiSelectDialog extends StatelessWidget {
                 child: Text('Пригласить'),
                 onPressed: () {
                   // Clear the list
-                  selectedItems.clear();
+                  widget.selectedItems.clear();
 
                   // Traverse each map entry
                   mappedItem!.forEach((key, value) {
                     if (value == true) {
-                      selectedItems.add(key);
+                      widget.selectedItems.add(key);
                     }
                   });
 
                   // Close the Dialog & return selectedItems
-                  Navigator.pop(context, selectedItems);
+                  Navigator.pop(context, widget.selectedItems);
                 }))
       ],
     );
@@ -91,4 +118,5 @@ class MultiSelectDialog extends StatelessWidget {
     properties.add(DiagnosticsProperty<Map<Client, bool>>('mappedItem', mappedItem));
     properties.add(DiagnosticsProperty<Map<Client, bool>>('mappedItem', mappedItem));
   }
+
 }

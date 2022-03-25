@@ -34,12 +34,12 @@ class PageRouter {
             bundle: args as ArgumentBundle,
           ),
         );
-      // case PagePath.welcome:
-      //   return _buildRoute(settings, WelcomeScreen());
-      // case PagePath.auth:
-      //   return _buildRoute(settings, Login());
-      // case PagePath.registration:
-      //   return _buildRoute(settings, Reg());
+      case PagePath.welcome:
+        return _buildRoute(settings, WelcomeScreen());
+      case PagePath.auth:
+        return _buildRoute(settings, Login());
+      case PagePath.registration:
+        return _buildRoute(settings, Reg());
       case PagePath.clientList:
         return _buildRoute(settings, ClientList(bundle: args as ArgumentBundle));
       // case PagePath.onGoingComplete:

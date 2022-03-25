@@ -41,7 +41,8 @@ class _TaskSheetState extends State<TaskSheet> {
   double _currentSliderValue = 1000;
   List<Client> clients = [];
   List<Client> selectedClients = [];
-
+  List<Client> invitedClient = [];
+  List<int> clientsId = [];
   final Future<String> _calculation = Future<String>.delayed(
     const Duration(seconds: 3),
         () => 'Data Loaded',
@@ -50,11 +51,16 @@ class _TaskSheetState extends State<TaskSheet> {
   getData() async {
     cats = await EventCategory.fetchData();
     clients = await Client.fetchData();
+    invitedClient = await Client.fetchByEvent(event!.id!);
+    for (var cl in invitedClient) {
+      clientsId.add(cl.id!);
+    }
     if(widget.categoryId!=null){
       category = await EventCategory.fetchCatById(widget.categoryId!);
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
       owner = await Client.fetchClient(preferences.getInt('currentId')!);
+    clients.removeWhere((element) => element.id==owner!.id);
   }
 
   @override
@@ -175,6 +181,7 @@ class _TaskSheetState extends State<TaskSheet> {
         );
       }
       Event.updateEvent(eventItemEntity);
+      selectedClients.add(owner!);
       Client.invite(selectedClients, eventItemEntity).then((value) => print(value.statusCode));
       Helper.showCustomSnackBar(
         context,
@@ -395,7 +402,8 @@ class _TaskSheetState extends State<TaskSheet> {
                                   context: context,
                                   builder: (_) => MultiSelectDialog(
                                       question: Text('Выберете пользователей'),
-                                      answers: clients)) ??
+                                      answers: clients,
+                                      invitedClient: clientsId)) ??
                                   [];
                               print(selectedClients);
                       // Logic to save selected flavours in the database
