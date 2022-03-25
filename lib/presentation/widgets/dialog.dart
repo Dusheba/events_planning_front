@@ -35,6 +35,7 @@ class MultiSelectDialog extends StatefulWidget {
     TextEditingController searchController = TextEditingController();
     Timer? debouncer;
   Map<Client, bool> initMap() {
+    print(widget.invitedClient.toString());
     return mappedItem = { for (var item in widget.answers) item :  widget.invitedClient.contains(item.id)};
   }
 

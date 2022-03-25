@@ -10,6 +10,7 @@ import 'package:events_planning/presentation/widgets/wide_app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:events_planning/presentation/widgets/task_item_widget.dart';
+import 'package:flutter_color/flutter_color.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -35,6 +36,7 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
   List<Event> next = [];
   List<Event> archive = [];
   int? currentClientId;
+  LinearGradient gradient = LinearGradient(colors: [AppTheme.pinkBright, AppTheme.purpleDark]);
 
   final Future<String> _calculation = Future<String>.delayed(
     const Duration(seconds: 3),
@@ -84,81 +86,110 @@ class _DetailCategoryTaskPageState extends State<DetailCategoryTaskPage> {
               return CustomScrollView(
                 physics: BouncingScrollPhysics(),
                 slivers: [
-                  WideAppBar(
-                  tag: index.toString(),
-                  title: _category.title,
-                  gradient: LinearGradient(colors: [AppTheme.pinkBright, AppTheme.purpleDark],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter
-            ),
-                  // AppTheme.getGradientByName(_category!.color),
-                  actions: [
-                  IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {},
+                  SliverAppBar(
+                  expandedHeight: 250.0,
+                  floating: false,
+                  pinned: true,
+                  title: Hero(
+                    tag: Keys.heroTitleCategory + index.toString(),
+                    child: Text(
+                      _category.title,
+                      style: AppTheme.eventHeadline,
+                    ),
                   ),
-                  IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () => Helper.showBottomSheet(context)),
+                  actions:[
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () => Helper.showBottomSheet(context)),
                   ],
-                  child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                    height: MediaQuery.of(context).padding.top,
+                  backgroundColor:
+                  gradient.colors[0].mix(gradient.colors[1], 0.5),
+                  stretch: true,
+                  shadowColor: AppTheme.getShadow(gradient.colors[1])[0].color,
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                  ),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: FutureBuilder<String>(
+                        future: _calculation,
+                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                          if(snapshot.hasData) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                gradient: gradient.withDiagonalGradient,
+                                borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).padding.top,
+                                  ),
+                                  SizedBox(
+                                    height: 36,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                DateFormat('MMM, yyyy', 'ru').format(datePicked),
+                                                style: AppTheme.eventHeadline,
+                                              ),
+                                              SizedBox(height: 8),
+                                              ValueListenableBuilder<int>(
+                                                valueListenable: totalTasks,
+                                                builder: (context, value, child) => Text(
+                                                  'Предстоящих событий ${_eventsWithCat.length}',
+                                                  style: AppTheme.valueEventText,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  CalendarTimeline(
+                                    initialDate: datePicked,
+                                    firstDate: DateTime(2019, 1, 1),
+                                    lastDate: DateTime(2025, 11, 20),
+                                    onDateSelected: (date) =>
+                                        setState(() {
+                                          datePicked = date!;
+                                          print(datePicked.month);
+                                          fetchData(datePicked.month, index);
+                                        })
+                                    ,
+                                    leftMargin: 20,
+                                    monthColor: Colors.blueGrey,
+                                    dayColor: Color.fromARGB(168, 255, 255, 255),
+                                    activeDayColor: AppTheme.white,
+                                    activeBackgroundDayColor: AppTheme.bottomNavigationPurple,
+                                    dotsColor: Color(0xFF333A47),
+                                    locale: 'ru',
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          else {
+                            return LoadingWidget();
+                          }
+                        }
                     ),
-                    SizedBox(
-                    height: 36,
-                    ),
-                    Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                      child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                        DateFormat('MMM, yyyy', 'ru').format(datePicked),
-                        style: AppTheme.eventHeadline,
-                        ),
-                        SizedBox(height: 8),
-                        ValueListenableBuilder<int>(
-                        valueListenable: totalTasks,
-                        builder: (context, value, child) => Text(
-                        'Предстоящих событий ${_eventsWithCat.length}',
-                        style: AppTheme.valueEventText,
-                        ),
-                        ),
-                      ],
-                      ),
-                      ),
-                    ],
-                    ),
-                    ),
-                    CalendarTimeline(
-                    initialDate: datePicked,
-                    firstDate: DateTime(2019, 1, 1),
-                    lastDate: DateTime(2025, 11, 20),
-                    onDateSelected: (date) =>
-                      setState(() {
-                    datePicked = date!;
-                    fetchData(datePicked.month, index);
-                    })
-                    ,
-                    leftMargin: 20,
-                    monthColor: Colors.blueGrey,
-                    dayColor: Color.fromARGB(168, 255, 255, 255),
-                    activeDayColor: AppTheme.white,
-                    activeBackgroundDayColor: AppTheme.bottomNavigationPurple,
-                    dotsColor: Color(0xFF333A47),
-                    locale: 'ru',
-                    ),
-                    ],
-                    ),
-                    ),
+                  )),
                       SliverList(
                       delegate: SliverChildListDelegate([
                       _taskList(),

@@ -51,7 +51,9 @@ class _TaskSheetState extends State<TaskSheet> {
   getData() async {
     cats = await EventCategory.fetchData();
     clients = await Client.fetchData();
-    invitedClient = await Client.fetchByEvent(event!.id!);
+    if(event!=null) {
+      invitedClient = await Client.fetchByEvent(event!.id!);
+    }
     for (var cl in invitedClient) {
       clientsId.add(cl.id!);
     }
@@ -301,7 +303,7 @@ class _TaskSheetState extends State<TaskSheet> {
                               onTap:
                                 _deleteTask
                             ),
-                            Text('Update Event',
+                            Text('Обновить событие',
                                 style: AppTheme.mainPageHeadline),
                             GestureDetector(
                               child: SvgPicture.asset(
@@ -314,7 +316,7 @@ class _TaskSheetState extends State<TaskSheet> {
                           ],
                         )
                             : Center(
-                          child: Text('Add Event',
+                          child: Text('Добавить событие',
                               style: AppTheme.mainPageHeadline),
                         ),
                         SizedBox(height: 20),

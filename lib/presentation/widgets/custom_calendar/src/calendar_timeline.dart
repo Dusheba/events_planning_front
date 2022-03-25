@@ -111,7 +111,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _initCalendar();
     if (widget.showYears) _moveToYearIndex(_yearSelectedIndex ?? 0);
     _moveToMonthIndex(_monthSelectedIndex ?? 0);
-    _moveToDayIndex(_daySelectedIndex ?? 0);
+    //_moveToDayIndex(_daySelectedIndex ?? 0);
   }
 
   @override
@@ -385,7 +385,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _controllerMonth.scrollTo(
       index: index,
       alignment: _scrollAlignment,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 300),
       opacityAnimationWeights: [20, 20, 60],
       curve: Curves.easeInOutCubic,
     );
@@ -406,7 +406,7 @@ class _CalendarTimelineState extends State<CalendarTimeline> {
     _selectedDate = _days[index];
     widget.onDateSelected(_selectedDate);
     print(_selectedDate);
-    // setState(() {});
+    setState(() {});
   }
 
   selectedYear() {
