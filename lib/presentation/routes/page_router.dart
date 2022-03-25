@@ -1,3 +1,4 @@
+import 'package:events_planning/presentation/pages/edit_profile.dart';
 import 'package:events_planning/presentation/pages/login.dart';
 import 'package:events_planning/presentation/pages/pages.dart';
 import 'package:events_planning/presentation/pages/profile_page.dart';
@@ -34,14 +35,16 @@ class PageRouter {
             bundle: args as ArgumentBundle,
           ),
         );
-      // case PagePath.welcome:
-      //   return _buildRoute(settings, WelcomeScreen());
-      // case PagePath.auth:
-      //   return _buildRoute(settings, Login());
-      // case PagePath.registration:
-      //   return _buildRoute(settings, Reg());
+      case PagePath.welcome:
+        return _buildRoute(settings, WelcomeScreen());
+      case PagePath.auth:
+         return _buildRoute(settings, Login());
+      case PagePath.registration:
+         return _buildRoute(settings, Reg());
       case PagePath.clientList:
         return _buildRoute(settings, ClientList(bundle: args as ArgumentBundle));
+      case PagePath.editProfile:
+        return _buildRoute(settings, EditProfilePage());
       // case PagePath.onGoingComplete:
       //   return _buildRoute(
       //     settings,

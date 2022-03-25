@@ -139,9 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           title: Text("Редактировать профиль"),
                           trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap: () {
-                            //open change password
-                          },
+                          onTap: () {Navigator.pushReplacementNamed(context, PagePath.editProfile);},
                         ),
                         _buildDivider(),
                         ListTile(

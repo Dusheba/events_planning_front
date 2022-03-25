@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../routes/page_path.dart';
 //import 'package:encrypt/encrypt.dart';
@@ -60,22 +61,24 @@ class Login extends StatelessWidget{
     }
 
     Future searchClient(String login, String password) async{
+      print(login+' '+password);
       final clients = await Client.fetchData();
       for (Client client in clients){
         print(client.username);
-        if(!(client.username==login)&&!(client.pass==password)){
+        if(client.username==login&&client.pass==password){
           _loginController.clear();
           _passwordController.clear();
-          return ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Пользователь не найден!'), backgroundColor: Colors.redAccent,),
-          );
-        }
-        else{
-          _loginController.clear();
-          _passwordController.clear();
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          preferences.setInt('currentId', client.id!);
+          print(preferences.getInt('currentId'));
           return Navigator.pushReplacementNamed(context, PagePath.base);
         }
       }
+      _loginController.clear();
+      _passwordController.clear();
+      return ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Пользователь не найден!'), backgroundColor: Colors.redAccent,),
+      );
     }
 
 
