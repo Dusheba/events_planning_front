@@ -2,8 +2,12 @@ import 'dart:async';
 
 import 'package:events_planning/data/client.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
+import 'package:events_planning/presentation/widgets/buttons.dart';
+import 'package:events_planning/presentation/widgets/state_widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:lottie/lottie.dart';
 import '../utils/app_theme.dart';
 
 /// A Custom Dialog that displays a single question & list of answers.
@@ -89,29 +93,57 @@ class MultiSelectDialog extends StatefulWidget {
                 onChanged: (value) => setState(() => mappedItem![key] = value!)),
           );
         }).toList(),
-        Align(
-            alignment: Alignment.center,
-            child: ElevatedButton(
-                style: ButtonStyle(visualDensity: VisualDensity.comfortable,
-                    backgroundColor: MaterialStateProperty.all<Color>(AppTheme.bottomAddSheetDate)),
-                child: Text('Пригласить'),
-                onPressed: () {
-                  // Clear the list
-                  widget.selectedItems.clear();
-
-                  // Traverse each map entry
-                  mappedItem!.forEach((key, value) {
-                    if (value == true) {
-                      widget.selectedItems.add(key);
-                    }
-                  });
-
-                  // Close the Dialog & return selectedItems
-                  Navigator.pop(context, widget.selectedItems);
-                }))
+        list()
       ],
     );
   }
+
+   Widget list() {
+     if (mappedItem!.keys.isEmpty) {
+       return
+           Container(
+             height: 300,
+             width: 200,
+               child:
+               Column(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Center(
+                     child: LottieBuilder.asset(Resources.empty,
+                         height: MediaQuery.of(context).size.height * 0.2),
+                   ),
+                   Container(
+                     child: Text(
+                         'Пользователь с таким юзернэймом не зарегистрирован, отправьте ему приглашение',
+                         style: AppTheme.hintsText),
+                   ),
+                   RippleButton(text: 'Отправить приглашение', onTap: () => {}),
+                 ],
+               ));
+     }
+     else return Align(
+         alignment: Alignment.center,
+         child: ElevatedButton(
+             style: ButtonStyle(visualDensity: VisualDensity.comfortable,
+                 backgroundColor: MaterialStateProperty.all<Color>(AppTheme.bottomAddSheetDate)),
+             child: Text('Пригласить'),
+             onPressed: () {
+               // Clear the list
+               widget.selectedItems.clear();
+
+               // Traverse each map entry
+               mappedItem!.forEach((key, value) {
+                 if (value == true) {
+                   widget.selectedItems.add(key);
+                 }
+               });
+
+               // Close the Dialog & return selectedItems
+               Navigator.pop(context, widget.selectedItems);
+             }));
+   }
+
+
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
