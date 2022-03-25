@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:auto_animated/auto_animated.dart';
 import 'package:events_planning/data/entities.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
@@ -18,15 +19,9 @@ class SearchPageState extends State<SearchPage> {
   Timer? debouncer;
   int? currentClientId;
 
-  // Future searchClient() async{
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   currentClientId = preferences.getInt('currentId')!;
-  // }
-
   @override
   void initState() {
     super.initState();
-    // searchClient();
     init();
   }
 
@@ -37,9 +32,9 @@ class SearchPageState extends State<SearchPage> {
   }
 
   void debounce(
-      VoidCallback callback, {
-        Duration duration = const Duration(milliseconds: 1000),
-      }) {
+    VoidCallback callback, {
+    Duration duration = const Duration(milliseconds: 1000),
+  }) {
     if (debouncer != null) {
       debouncer!.cancel();
     }
@@ -57,50 +52,52 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: Column(
-      children: <Widget>[
-        buildSearch(),
-        Padding(
-            padding: const EdgeInsets.fromLTRB(15,0,200,0),
-            child:
-            Text('Найдено событий',
-          style: AppTheme.mainPageSmallHeadline,
-
-        )),
-        Expanded(
-          child: LiveList.options(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            options: Helper.options,
-            itemCount: events.length,
-            itemBuilder: (context, index, animation) {
-              final event = events[index];
-              return EventItemWidget(event: event, category: event.category, animation: animation);
-            },
-          ),
+        body: Column(
+          children: <Widget>[
+            buildSearch(),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 200, 0),
+                child: Text(
+                  'Найдено событий',
+                  style: AppTheme.mainPageSmallHeadline,
+                )),
+            Expanded(
+              child: LiveList.options(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                options: Helper.options,
+                itemCount: events.length,
+                itemBuilder: (context, index, animation) {
+                  final event = events[index];
+                  return EventItemWidget(
+                      event: event,
+                      category: event.category,
+                      animation: animation);
+                },
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 
   Widget buildSearch() => SearchWidget(
-    text: query,
-    hintText: 'Поиск событий',
-    onChanged: searchEvent,
-  );
+        text: query,
+        hintText: 'Поиск событий',
+        onChanged: searchEvent,
+      );
 
   Future searchEvent(String query) async => debounce(() async {
-    final events = await Event.fetchEventByTitle(query, 1);
+        final events = await Event.fetchEventByTitle(query, currentClientId!);
 
-    if (!mounted) return;
+        if (!mounted) return;
 
-    setState(() {
-      this.query = query;
-      this.events = events;
-    });
-  });
+        setState(() {
+          this.query = query;
+          this.events = events;
+        });
+      });
 
   Widget buildEvent(Event event) => ListTile(
-    title: Text(event.title),
-    subtitle: Text(event.category.title),
-  );
+        title: Text(event.title),
+        subtitle: Text(event.category.title),
+      );
 }
