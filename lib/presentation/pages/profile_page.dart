@@ -1,19 +1,22 @@
+import 'package:events_planning/data/client.dart';
 import 'package:events_planning/presentation/routes/routes.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:events_planning/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatefulWidget {
-
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
   late bool _dark;
-
   int _currentBody = 1;
+  int? currentClientId;
+  String clientName = "Абоба";
+  String clientEmail = "aboba@mail.ru";
+
   _onItemTapped(int index) {
     setState(() {
       _currentBody = index;
@@ -23,12 +26,26 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    init();
     _dark = false;
+  }
+
+  Future init() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    currentClientId = preferences.getInt('currentId')!;
+    final client = await Client.fetchClient(currentClientId!);
+    setState(() {
+      clientName = client!.name;
+      clientEmail = client.email;
+    });
+    // clientName = client!.name;
+    // clientEmail = client.email;
   }
 
   Brightness _getBrightness() {
     return _dark ? Brightness.dark : Brightness.light;
   }
+
   void onChange(int i) {
     //Заглушка для bottom_nav_bar
     print(i);
@@ -41,22 +58,27 @@ class _ProfilePageState extends State<ProfilePage> {
         brightness: _getBrightness(),
       ),
       child: Scaffold(
-        bottomNavigationBar: BottomNavBar( selectedIndex: _currentBody,
-          onItemTapped: _onItemTapped,),
+        floatingActionButton: Container(
+          margin: EdgeInsets.only(top: 25),
+          height: 56,
+          width: 56,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppTheme.bottomNavigationPurple,
+            boxShadow: AppTheme.getShadow(AppTheme.darkBorderPurple),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(56),
+            child: Icon(Icons.add, color: Colors.white)
+                .addRipple(onTap: () => Helper.showBottomSheet(context)),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavBar(
+          selectedIndex: _currentBody,
+          onItemTapped: _onItemTapped,
+        ),
         backgroundColor: _dark ? null : Colors.grey.shade200,
-        // appBar: AppBar(
-        //   elevation: 0,
-        //   brightness: _getBrightness(),
-        //   automaticallyImplyLeading: false,
-        //   backgroundColor: Colors.transparent,
-        //   title: Padding(
-        //     padding: const EdgeInsets.symmetric(horizontal: 10),
-        //     child: const Text(
-        //       '',
-        //       style: AppTheme.mainPageHeadline,
-        //     ),
-        //   ),
-        // ),
         body: Stack(
           fit: StackFit.expand,
           children: <Widget>[
@@ -67,9 +89,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(top: 50),
-                    height:80,
+                    height: 80,
                     child: Card(
-                      elevation:8.0,
+                      elevation: 8.0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Container(
@@ -78,16 +100,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: ListTile(
-                          onTap: () {
-                            //open edit profile
-                          },
                           leading: Container(
                             padding: EdgeInsets.fromLTRB(0, 10, 110, 0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  "Абобус",
+                                  clientName,
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
@@ -96,8 +115,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 const SizedBox(height: 5.0),
                                 Text(
-                                  "abobus@mail.ru",
-                                  style: TextStyle(
+                                  clientEmail,
+                                  style: const TextStyle(
                                     color: AppTheme.valueEventColor,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15,
@@ -106,23 +125,20 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             ),
                           ),
-                          // leading: CircleAvatar(
-                          //   backgroundImage: NetworkImage(Resources.on_board_2),
-                          // ),
-                          trailing: Text(
+                          trailing: const Text(
                             "Выйти",
                             style: AppTheme.valueEventText,
+                          ).addRipple(
+                            onTap: () =>
+                                Navigator.pushNamed(context, PagePath.welcome),
                           ),
                         ),
-                      )
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10,20,0,0),
-                    child: const Text(
-                        "Настройки",
-                        style: AppTheme.mainPageHeadline
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(10, 20, 0, 0),
+                    child: Text("Настройки", style: AppTheme.mainPageHeadline),
                   ),
                   const SizedBox(height: 20.0),
                   Card(
@@ -133,13 +149,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(
+                          leading: const Icon(
                             Icons.edit,
                             color: AppTheme.boldColorFont,
                           ),
                           title: Text("Редактировать профиль"),
                           trailing: Icon(Icons.keyboard_arrow_right),
-                          onTap: () {Navigator.pushReplacementNamed(context, PagePath.editProfile);},
+                          onTap: () {
+                            Navigator.pushReplacementNamed(
+                                context, PagePath.editProfile);
+                          },
                         ),
                         _buildDivider(),
                         ListTile(
@@ -170,14 +189,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 20.0),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                    child: Text(
-                      "Уведомления",
-                      style: AppTheme.mainPageHeadline
-                    ),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child:
+                        Text("Уведомления", style: AppTheme.mainPageHeadline),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: SwitchListTile(
                       activeColor: AppTheme.boldColorFont,
                       contentPadding: const EdgeInsets.all(0),
@@ -187,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: SwitchListTile(
                       activeColor: AppTheme.boldColorFont,
                       contentPadding: const EdgeInsets.all(0),
@@ -197,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: SwitchListTile(
                       activeColor: AppTheme.boldColorFont,
                       contentPadding: const EdgeInsets.all(0),
@@ -207,7 +224,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: SwitchListTile(
                       activeColor: AppTheme.boldColorFont,
                       contentPadding: const EdgeInsets.all(0),
@@ -220,32 +237,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-            // Positioned(
-            //   bottom: -20,
-            //   left: -20,
-            //   child: Container(
-            //     width: 80,
-            //     height: 80,
-            //     alignment: Alignment.center,
-            //     decoration: BoxDecoration(
-            //       color: AppTheme.boldColorFont,
-            //       shape: BoxShape.circle,
-            //     ),
-            //   ),
-            // ),
-            // Positioned(
-            //   bottom: 00,
-            //   left: 00,
-            //   child: IconButton(
-            //     icon: Icon(
-            //       Icons.settings_outlined,
-            //       color: Colors.white,
-            //     ),
-            //     onPressed: () {
-            //       //log out
-            //     },
-            //   ),
-            // )
           ],
         ),
       ),
