@@ -71,9 +71,9 @@ class Event {
     return events;
   }
 
-  static Future<List<Event>> fetchEventByCat(int id) async {
+  static Future<List<Event>> fetchEventByCat(int id, int client) async {
     List<Event> events = [];
-    var url = "http://10.0.2.2:8080/api/events/category?category=$id";
+    var url = "http://10.0.2.2:8080/api/events/category?category=$id&client=$client";
     var response = await http.get(Uri.parse(url));
     if (response.statusCode==200){
       var res = json.decode(utf8.decode(response.bodyBytes));

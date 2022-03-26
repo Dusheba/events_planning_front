@@ -54,7 +54,7 @@ class _DashboardPageState extends State<DashboardPage> {
     }
     client = await Client.fetchClient(currentClientId!);
     for (var i = 0; i < _cats.length; i++) {
-      _eventsByCat.add(await Event.fetchEventByCat(_cats[i].id));
+      _eventsByCat.add(await Event.fetchEventByCat(_cats[i].id, currentClientId!));
     }
 
   }
