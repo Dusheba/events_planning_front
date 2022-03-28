@@ -1,5 +1,3 @@
-import 'package:events_planning/presentation/pages/login.dart';
-import 'package:events_planning/presentation/pages/reg.dart';
 import 'package:events_planning/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -21,12 +19,9 @@ class WelcomeScreen extends StatelessWidget{
             SizedBox(height: size.height*0.05,),
             Image.asset(
               Resources.icon_outlined,
-              height: size.height * 0.50,
+              height: size.height * 0.4,
+              width: size.width*0.75,
             ),
-            // Image.asset(
-            //   "/icons/app_icon.png",
-            //   height: size.height * 0.50,
-            // ),
             Container(
               height: size.height*0.25,
               width: double.infinity,
