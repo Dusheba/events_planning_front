@@ -105,8 +105,8 @@ static Future<List<Client>> fetchByEvent(int id) async {
 
   static Future<http.Response> addClient(Client client) async {
     return http.post(
-        Uri.parse("http://localhost:8080/api/client/add"),
-        //Uri.parse("http://10.0.2.2:8080/api/client/add"),
+        //Uri.parse("http://localhost:8080/api/client/add"),
+        Uri.parse("http://10.0.2.2:8080/api/client/add"),
         headers: {"Content-Type": "application/json"},
         body: clientToJson(client)
     );

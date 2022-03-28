@@ -135,7 +135,7 @@ class Reg extends StatelessWidget{
           _passwordController1.clear();
           _passwordController2.clear();
           searchClient(client.username, client.pass);
-          Navigator.pushReplacementNamed(context, PagePath.base);
+          Navigator.pushReplacementNamed(context, PagePath.intro_page);
         }
       }
     }
@@ -198,7 +198,7 @@ class Reg extends StatelessWidget{
                                         _input("Email", Icon(Icons.email_outlined, color: Color.fromARGB(255, 151, 94, 186)), "event@mail.ru", TextInputType.emailAddress, false, _emailController),
                                         _input("Имя", Icon(Icons.account_circle_outlined, color: Color.fromARGB(255, 151, 94, 186)), "Светлана", TextInputType.name, false, _nameController),
                                         _input("Логин", Icon(Icons.person_outlined, color: Color.fromARGB(255, 151, 94, 186)), "event11", TextInputType.name, false, _loginController),
-                                        _input("Телефон", Icon(Icons.phone_outlined, color: Color.fromARGB(255, 151, 94, 186)), "+79121211212", TextInputType.phone, false, _phoneController),
+                                        _input("Телефон", Icon(Icons.phone_outlined, color: Color.fromARGB(255, 151, 94, 186)), "+79121211212", TextInputType.name, false, _phoneController),
                                         _input("Пароль", Icon(Icons.vpn_key_outlined, color: Color.fromARGB(255, 151, 94, 186)), "Event!11", TextInputType.visiblePassword, true, _passwordController1),
                                         _input("Повторный пароль", Icon(Icons.vpn_key_sharp, color: Color.fromARGB(255, 151, 94, 186)), "Event!11", TextInputType.visiblePassword, true, _passwordController2),
                                       ],
