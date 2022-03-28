@@ -8,7 +8,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// A Custom Dialog that displays a single question & list of answers.
 class MultiSelectDialog extends StatefulWidget {
@@ -33,7 +35,22 @@ class MultiSelectDialog extends StatefulWidget {
   /// Function that converts the list answer to a map.
     static Map<Client, bool>? mappedItem;
     TextEditingController searchController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
     Timer? debouncer;
+    int? currentClientId;
+    String? clientName;
+
+    Future init() async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      currentClientId = preferences.getInt('currentId')!;
+      final client = await Client.fetchClient(currentClientId!);
+      setState(() {
+        clientName = client!.name;
+      });
+      // clientName = client!.name;
+      // clientEmail = client.email;
+    }
+
   Map<Client, bool> initMap() {
     print(widget.invitedClient.toString());
     return mappedItem = { for (var item in widget.answers) item :  widget.invitedClient.contains(item.id)};
@@ -50,6 +67,11 @@ class MultiSelectDialog extends StatefulWidget {
       debouncer = Timer(duration, callback);
     }
 
+    _launchEmail(email) async {
+    print('****');
+      launch("mailto:$email?subject=Приглашение&body=$clientName приглашет вас в приложение Event Planning%20plugin");
+    }
+
   Future searchClient(String val) async => debounce(() async {
     initMap();
     setState((){
@@ -63,6 +85,7 @@ class MultiSelectDialog extends StatefulWidget {
     if (mappedItem == null) {
       initMap();
     }
+    init();
     return SimpleDialog(
       title: widget.question,
       contentPadding: EdgeInsets.all(10),
@@ -103,7 +126,7 @@ class MultiSelectDialog extends StatefulWidget {
      if (mappedItem!.keys.isEmpty) {
        return
            Container(
-             height: 300,
+             height: 350,
              width: 200,
                child:
                Column(
@@ -118,7 +141,25 @@ class MultiSelectDialog extends StatefulWidget {
                          'Пользователь с таким юзернэймом не зарегистрирован, отправьте ему приглашение',
                          style: AppTheme.hintsText),
                    ),
-                   RippleButton(text: 'Отправить приглашение', onTap: () => {}),
+                   TextFormField(
+                     style: AppTheme.eventPanelHeadline.withBlack,
+                     controller: emailController,
+                     decoration: InputDecoration(
+                         hintText: 'Введите email...',
+                         hintStyle: AppTheme.hintsText,
+                         border: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(7),
+                             borderSide: BorderSide(
+                                 color: AppTheme.borderPurple
+                             )
+                         )
+                     ),
+
+                   ),
+                   RippleButton(text: 'Отправить приглашение', onTap: () => {
+                     _launchEmail(emailController.text),
+                     searchClient('')
+                   }),
                  ],
                ));
      }

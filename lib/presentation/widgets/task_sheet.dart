@@ -503,6 +503,7 @@ class _TaskSheetState extends State<TaskSheet> {
                         )
                             : Container(),
                         SizedBox(height: 20),
+                        if((widget.isUpdate && widget.event!.owner.id == owner!.id) || (!widget.isUpdate))
                         PinkButton(
                           text: widget.isUpdate
                               ? 'Обновить'

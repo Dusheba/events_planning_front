@@ -107,10 +107,8 @@ class Reg extends StatelessWidget{
           preferences.setInt('currentId', client.id!);
           return ;
         }
-        else{
-          return print("пользователь не найден...");
-        }
       }
+      return print("пользователь не найден...");
     }
 
     Future<void> submit() async {
@@ -127,7 +125,7 @@ class Reg extends StatelessWidget{
               pass: _passwordController1.text,
               social: ''
           );
-          Client.addClient(client);
+          await Client.addClient(client);
           _emailController.clear();
           _nameController.clear();
           _loginController.clear();
@@ -135,6 +133,7 @@ class Reg extends StatelessWidget{
           _passwordController1.clear();
           _passwordController2.clear();
           searchClient(client.username, client.pass);
+          await searchClient(client.username, client.pass);
           Navigator.pushReplacementNamed(context, PagePath.intro_page);
         }
       }
