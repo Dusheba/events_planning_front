@@ -8,7 +8,7 @@ import 'data/exception/api_exception.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  preferences.setInt('currentId', 1);
+  // preferences.setInt('currentId', 1);
  runApp(MyApp());
 }
 
