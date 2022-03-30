@@ -1,7 +1,9 @@
+import 'package:events_planning/main.dart';
 import 'package:events_planning/presentation/pages/edit_profile.dart';
 import 'package:events_planning/presentation/pages/intro_page.dart';
 import 'package:events_planning/presentation/pages/login.dart';
 import 'package:events_planning/presentation/pages/pages.dart';
+import 'package:events_planning/presentation/pages/preferences.dart';
 import 'package:events_planning/presentation/pages/profile_page.dart';
 import 'package:events_planning/presentation/pages/reg.dart';
 import 'package:events_planning/presentation/pages/welcome.dart';
@@ -29,6 +31,8 @@ class PageRouter {
         return _buildRoute(settings, ProfilePage());
       case PagePath.about_app:
         return _buildRoute(settings, AboutAppPage());
+      case PagePath.preferences:
+        return _buildRoute(settings, PreferencesPage());
       case PagePath.detailCategory:
         return _buildRoute(
           settings,

@@ -169,6 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           title: Text("Мои предпочтения"),
                           trailing: Icon(Icons.keyboard_arrow_right),
                           onTap: () {
+                            Navigator.pushNamed(context, PagePath.preferences);
                             //open change language
                           },
                         ),
