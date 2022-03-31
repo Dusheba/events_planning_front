@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void _navigateOtherScreen() {
       Future.delayed(Duration(seconds: 2))
-          .then((_) => Navigator.pushReplacementNamed(context, PagePath.welcome ));
+          .then((_) => Navigator.pushReplacementNamed(context, PagePath.base ));
     }
 
   @override

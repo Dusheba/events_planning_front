@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:events_planning/data/client.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -35,5 +36,42 @@ class Preference {
     }
     return prefes;
   }
-
+  static Future<List<Preference>> fetchData() async {
+    List<Preference> preferences = [];
+    var url = "http://10.0.2.2:8080/api/preferences/all";
+    //var url = "http://localhost:8080/api/clients/all";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(utf8.decode(response.bodyBytes));
+      for (var cl in res) {
+        preferences.add(Preference.fromJson(cl));
+      }
+    }
+    return preferences;
+  }
+  static Future<List<Preference>> fetchPref(int id) async {
+    List<Preference> preferences = [];
+    var url = "http://10.0.2.2:8080/api/preferences/client?client=$id";
+    //var url = "http://localhost:8080/api/clients/all";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode==200){
+      var res = json.decode(response.body);
+      for (var cl in res) {
+        preferences.add(Preference.fromJson(cl));
+      }
+    }
+    return preferences;
+  }
+  static Future<http.Response> invite(List<Preference> pref, Client cl) async {
+    print(pref.length);
+    return http.post(
+        Uri.parse("http://10.0.2.2:8080/api/preferences/add"),
+            body: jsonEncode({
+            "preferences": pref,
+            "client": cl
+            }
+        ),
+        headers: {"Content-Type": "application/json"}
+    );
+  }
 }

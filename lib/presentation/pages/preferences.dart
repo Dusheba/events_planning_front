@@ -1,6 +1,10 @@
+import 'package:events_planning/data/client.dart';
+import 'package:events_planning/data/preference.dart';
 import 'package:events_planning/presentation/pages/notification_setting.dart';
+import 'package:events_planning/presentation/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:events_planning/presentation/routes/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -13,13 +17,43 @@ class PreferencesPage extends StatefulWidget {
 }
 
 class _PreferencesPageState extends State<PreferencesPage> {
-  final allowNotifications = NotificationSetting(title: 'Выбрать все предпочтения');
+  final allowNotifications = NotificationSetting(title: 'Выбрать все предпочтения',id:0);
+  List<Preference>? pref=[];
+  List<Preference>? all=[];
+  int? currentClientId;
+  Client? cli;
 
-  final notifications = [
-    NotificationSetting(title: 'Вегетарианское меню'),
-    NotificationSetting(title: 'Алкоголь'),
-    NotificationSetting(title: 'Музыка'),
+  final List<NotificationSetting> notifications = [
   ];
+
+  Future init() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    currentClientId = preferences.getInt('currentId')!;
+    pref = await Preference.fetchPref(currentClientId!);
+    all = await Preference.fetchData();
+    cli = await Client.fetchClient(preferences.getInt('currentId')!);
+    setState(() {
+      for (var o in all!) {
+        notifications.add(NotificationSetting(title:o.title,value: false, id:o.id
+        ));
+
+      }
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+  List<Preference>? select(){
+    for (var o in notifications) {
+      if (!o.value) {
+        all!.removeWhere((element) => element.id==o.id);
+      }
+
+    }
+    return all;
+  }
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -29,11 +63,22 @@ class _PreferencesPageState extends State<PreferencesPage> {
     appBar: AppBar(
       title: Text('Мои предпочтения'),
     ),
-    body: ListView(
+    body: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        buildToggleCheckbox(allowNotifications),
-        Divider(),
-        ...notifications.map(buildSingleCheckbox).toList(),
+        Container(
+          height: 400,
+          child: ListView(
+            children: [
+              buildToggleCheckbox(allowNotifications),
+              Divider(),
+              ...notifications.map(buildSingleCheckbox).toList(),
+            ],
+          ),
+        ),
+        PinkButton(text: 'Добавить', onTap: ()=> {
+          Preference.invite(select()!, cli!).then((value) => print(value.statusCode))
+        })
       ],
     ),
     ),
@@ -86,3 +131,4 @@ class _PreferencesPageState extends State<PreferencesPage> {
         ),
       );
 }
+
